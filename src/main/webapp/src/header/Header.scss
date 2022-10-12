@@ -1,0 +1,18 @@
+$header-color: #fff;
+$header-color-secondary: #bbb;
+$header-color-hover: darken($header-color, 20%);
+
+.header {
+  min-height: 55px;
+  font-size: large;
+}
+
+.header-title {
+  height: 100%;
+  font-size: 30px;
+  color: $header-color;
+  &:hover {
+    color: $header-color-hover;
+    text-decoration: none;
+  }
+}
