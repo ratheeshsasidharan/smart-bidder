@@ -28,7 +28,7 @@ import java.util.Objects;
 @RequestMapping("/api/projects")
 public class ProjectResource {
 
-    private static final String ENTITY_NAME = "project";
+    private static final String ENTITY_NAME = "Project";
     private final Logger log = LoggerFactory.getLogger(ProjectResource.class);
     private final ProjectService projectService;
 
@@ -38,24 +38,24 @@ public class ProjectResource {
     }
 
 
-    @PostMapping("/")
+    @PostMapping("")
     public Mono<ResponseEntity<ProjectDTO>> createProject(@Valid @RequestBody ProjectDTO projectDTO) throws URISyntaxException {
         log.debug("REST request to save Project : {}", projectDTO);
         if (projectDTO.getId() != null) {
             throw new BadRequestAlertException("A new project cannot already have an ID", ENTITY_NAME, "idexists");
         }
         return projectService
-                .save(projectDTO)
-                .map(result -> {
-                    try {
-                        return ResponseEntity
-                                .created(new URI("/api/projects/" + result.getId()))
-                                .headers(HeaderUtil.createEntityCreationAlert(true, ENTITY_NAME, result.getId().toString()))
-                                .body(result);
-                    } catch (URISyntaxException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
+            .save(projectDTO)
+            .map(result -> {
+                try {
+                    return ResponseEntity
+                            .created(new URI("/api/projects/" + result.getId()))
+                            .headers(HeaderUtil.createEntityCreationAlert(true, ENTITY_NAME, result.getId().toString()))
+                            .body(result);
+                } catch (URISyntaxException e) {
+                    throw new RuntimeException(e);
+                }
+            });
     }
 
 
@@ -91,7 +91,7 @@ public class ProjectResource {
     }
 
 
-    @GetMapping("/")
+    @GetMapping("")
     public Mono<ResponseEntity<List<ProjectDTO>>> getAllProjects(@org.springdoc.api.annotations.ParameterObject Pageable pageable,ServerHttpRequest request) {
         log.debug("REST request to get a page of Projects");
         return projectService

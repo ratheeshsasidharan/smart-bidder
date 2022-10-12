@@ -13,14 +13,14 @@ const Header = () => {
             </span>
                 <Nav id="header-tabs" className="ms-auto justify-content-evenly flex-grow-1" navbar>
                     <NavItem>
-                        <NavLink tag={Link} to="/" className="d-flex align-items-center">
+                        <NavLink tag={Link} to="/projects/new" className="d-flex align-items-center">
                             <FontAwesomeIcon icon="plus"/>
                             <span>&nbsp;Post Project</span>
                         </NavLink>
                     </NavItem>
 
                     <NavItem>
-                        <NavLink tag={Link} to="/" className="d-flex align-items-center">
+                        <NavLink tag={Link} to="/projects/home" className="d-flex align-items-center">
                             <FontAwesomeIcon icon="search"/>
                             <span>&nbsp;Browse Projects</span>
                         </NavLink>

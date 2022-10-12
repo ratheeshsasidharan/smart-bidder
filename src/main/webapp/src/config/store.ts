@@ -1,9 +1,11 @@
 import {configureStore} from "@reduxjs/toolkit";
 import rootReducer from "../reducers";
 import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
+import messagesMiddleware from "./messages-middleware";
 
 const store = configureStore({
-    reducer:rootReducer
+    reducer:rootReducer,
+    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(messagesMiddleware)
 });
 const getStore = () => store;
 

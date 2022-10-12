@@ -37,8 +37,8 @@ public class ProjectService {
     public Mono<ProjectDTO> save(ProjectDTO projectDTO) {
         log.debug("Request to save Project : {}", projectDTO);
         Project project = projectMapper.toEntity(projectDTO);
-        project.setCreatedBy(projectDTO.getCreatedBy());
-        project.setLastModifiedBy(projectDTO.getLastModifiedBy());
+        project.setCreatedBy("devuser");
+        project.setLastModifiedBy("devuser");
         return projectRepository.save(project).map(projectMapper::toDto);
     }
 
