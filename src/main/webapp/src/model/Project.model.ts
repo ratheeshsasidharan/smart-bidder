@@ -1,4 +1,5 @@
 import {ProjectCategory} from "./enumerations/project-category.model";
+import {ProjectStatus} from "./enumerations/project-status.model";
 
 export interface IProject {
   id?: number;
@@ -8,6 +9,10 @@ export interface IProject {
   postcode?: number;
   expectedNoOfHours?: number | null;
   dueDateTime?: string;
+  summary?: string;
+  budget?: number | null;
+  status?: ProjectStatus | null;
+  assignedBidId?: number | null;
 }
 
 export interface ProjectsState {

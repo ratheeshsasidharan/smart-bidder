@@ -16,7 +16,7 @@ import java.io.Serializable;
 
 @Data
 @Table(name = "USER_DETAILS")
-public class UserDetails extends AbstractAuditingEntity<Long> implements Serializable {
+public class UserDetails extends AuditingEntity<Long> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

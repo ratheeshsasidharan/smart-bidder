@@ -1,11 +1,15 @@
 package com.smartbidder.rest;
 
+import com.smartbidder.domain.ProjectBidDTO;
 import com.smartbidder.domain.ProjectDTO;
 import com.smartbidder.exception.BadRequestAlertException;
+import com.smartbidder.service.ProjectBidService;
 import com.smartbidder.service.ProjectService;
 import com.smartbidder.util.HeaderUtil;
 import com.smartbidder.util.PaginationUtil;
 import com.smartbidder.util.ResponseUtil;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageImpl;
@@ -16,6 +20,7 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
@@ -26,16 +31,13 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/projects")
+@Slf4j
+@AllArgsConstructor
 public class ProjectResource {
 
     private static final String ENTITY_NAME = "Project";
-    private final Logger log = LoggerFactory.getLogger(ProjectResource.class);
     private final ProjectService projectService;
-
-
-    public ProjectResource(ProjectService projectService) {
-        this.projectService = projectService;
-    }
+    private final ProjectBidService projectBidService;
 
 
     @PostMapping("")
@@ -50,7 +52,7 @@ public class ProjectResource {
                 try {
                     return ResponseEntity
                             .created(new URI("/api/projects/" + result.getId()))
-                            .headers(HeaderUtil.createEntityCreationAlert(true, ENTITY_NAME, result.getId().toString()))
+                            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
                             .body(result);
                 } catch (URISyntaxException e) {
                     throw new RuntimeException(e);
@@ -84,7 +86,7 @@ public class ProjectResource {
                             .map(result ->
                                     ResponseEntity
                                             .ok()
-                                            .headers(HeaderUtil.createEntityUpdateAlert(true, ENTITY_NAME, result.getId().toString()))
+                                            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, result.getId().toString()))
                                             .body(result)
                             );
                 });
@@ -118,6 +120,13 @@ public class ProjectResource {
         return ResponseUtil.wrapOrNotFound(projectDTO);
     }
 
+    @GetMapping("/{id}/project-bids")
+    public ResponseEntity<Flux<ProjectBidDTO>> getProjectBids(@PathVariable Long id,@org.springdoc.api.annotations.ParameterObject Pageable pageable,ServerHttpRequest request) {
+        log.debug("REST request to get Project bids : {}", id);
+        Flux<ProjectBidDTO> projectBidDTOFlux = projectBidService.findByProjectId(pageable,id);
+        return ResponseEntity.ok().body(projectBidDTOFlux);
+    }
+
 
     @DeleteMapping("/{id}")
     public Mono<ResponseEntity<Void>> deleteProject(@PathVariable Long id) {
@@ -128,7 +137,7 @@ public class ProjectResource {
                         Mono.just(
                                 ResponseEntity
                                         .noContent()
-                                        .headers(HeaderUtil.createEntityDeletionAlert(true, ENTITY_NAME, id.toString()))
+                                        .headers(HeaderUtil.createEntityDeletionAlert( ENTITY_NAME, id.toString()))
                                         .build()
                         )
                 );

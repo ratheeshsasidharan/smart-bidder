@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.time.Instant;
 
 @JsonIgnoreProperties(value = { "createdBy", "createdDate", "lastModifiedBy", "lastModifiedDate" }, allowGetters = true)
-public abstract class AbstractAuditingEntity<T> implements Serializable {
+public abstract class AuditingEntity<T> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

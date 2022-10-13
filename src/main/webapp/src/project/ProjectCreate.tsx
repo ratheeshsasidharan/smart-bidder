@@ -30,7 +30,7 @@ export const ProjectCreate = () => {
     }
 
     const handleClose = () => {
-        navigate('/projects');
+        navigate('/projects/home');
     };
 
     useEffect(() => {
@@ -49,6 +49,12 @@ export const ProjectCreate = () => {
                     </h2>
                 </Col>
             </Row>
+                <Row className="justify-content-center">
+                    <Col md="8" class="form-group">
+                        <label htmlFor="summary">Summary</label>
+                        <input className="form-control" defaultValue="" {...register("summary")} />
+                    </Col>
+                </Row>
             <Row className="justify-content-center">
                 <Col md="4" class="form-group">
                     <label htmlFor="categorySelect">Category</label>
@@ -98,14 +104,16 @@ export const ProjectCreate = () => {
                         <input className="form-control" type="datetime-local" defaultValue="" {...register("dueDateTime")} />
                     </Col>
                     <Col md="4" class="form-group">
+                        <label htmlFor="budget">Budget</label>
+                        <input className="form-control" defaultValue="" {...register("budget")} />
                     </Col>
                 </Row>
 
 
                 <Row className="justify-content-center">
                     <Col md="8" class="form-group">
-                        <label htmlFor="categorySelect">Description</label>
-                        <input className="form-control" defaultValue="" {...register("description")} />
+                        <label htmlFor="description">Description</label>
+                        <input type="text" className="form-control" defaultValue="" {...register("description")} />
                     </Col>
                 </Row>
                 <Row className="justify-content-center" style={{paddingTop:"20px"}}>

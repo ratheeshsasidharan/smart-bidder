@@ -28,43 +28,42 @@ public class HeaderUtil {
         return createAlert("smart-bidding",message,param);
     }
 
-    public static HttpHeaders createEntityCreationAlert(boolean enableTranslation, String entityName, String param) {
-        return createEntityCreationAlert("smart-bidding",enableTranslation,entityName,param);
+    public static HttpHeaders createEntityCreationAlert(String entityName, String param) {
+        return createEntityCreationAlert("smart-bidding",entityName,param);
     }
 
-    public static HttpHeaders createEntityCreationAlert(String applicationName, boolean enableTranslation, String entityName, String param) {
+    public static HttpHeaders createEntityCreationAlert(String applicationName, String entityName, String param) {
         String message = "A new " + entityName + " is created with identifier " + param;
         return createAlert(applicationName, message, param);
     }
 
-    public static HttpHeaders createEntityUpdateAlert(boolean enableTranslation, String entityName, String param) {
-        return createEntityCreationAlert("smart-bidding",enableTranslation,entityName,param);
+    public static HttpHeaders createEntityUpdateAlert(String entityName, String param) {
+        return createEntityCreationAlert("smart-bidding",entityName,param);
     }
 
-    public static HttpHeaders createEntityUpdateAlert(String applicationName, boolean enableTranslation, String entityName, String param) {
+    public static HttpHeaders createEntityUpdateAlert(String applicationName, String entityName, String param) {
         String message = "A " + entityName + " is updated with identifier " + param;
         return createAlert(applicationName, message, param);
     }
 
-    public static HttpHeaders createEntityDeletionAlert(boolean enableTranslation, String entityName, String param) {
-        return createEntityDeletionAlert("smart-bidding",enableTranslation,entityName,param);
+    public static HttpHeaders createEntityDeletionAlert(String entityName, String param) {
+        return createEntityDeletionAlert("smart-bidding",entityName,param);
     }
 
-    public static HttpHeaders createEntityDeletionAlert(String applicationName, boolean enableTranslation, String entityName, String param) {
+    public static HttpHeaders createEntityDeletionAlert(String applicationName, String entityName, String param) {
         String message = "A " + entityName + " is deleted with identifier " + param;
         return createAlert(applicationName, message, param);
     }
 
-    public static HttpHeaders createFailureAlert(String applicationName, boolean enableTranslation, String entityName, String errorKey, String defaultMessage) {
+    public static HttpHeaders createFailureAlert(String applicationName, String entityName, String errorKey, String defaultMessage) {
         log.error("Entity processing failed, {}", defaultMessage);
-        String message = enableTranslation ? "error." + errorKey : defaultMessage;
         HttpHeaders headers = new HttpHeaders();
-        headers.add("X-" + applicationName + "-error", message);
+        headers.add("X-" + applicationName + "-error", defaultMessage);
         headers.add("X-" + applicationName + "-params", entityName);
         return headers;
     }
 
-    public static HttpHeaders createFailureAlert(boolean enableTranslation, String entityName, String errorKey, String defaultMessage) {
-        return createFailureAlert("smart-bidding",enableTranslation,entityName,errorKey,defaultMessage);
+    public static HttpHeaders createFailureAlert(String entityName, String errorKey, String defaultMessage) {
+        return createFailureAlert("smart-bidding",entityName,errorKey,defaultMessage);
     }
 }

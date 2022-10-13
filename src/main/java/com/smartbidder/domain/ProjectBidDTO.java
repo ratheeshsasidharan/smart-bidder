@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.relational.core.mapping.Column;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -15,25 +14,21 @@ import java.util.Objects;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProjectDTO implements Serializable {
+public class ProjectBidDTO implements Serializable {
 
     private Long id;
 
-    private ProjectCategory category;
+    @NotNull(message = "must not be null")
+    private BidType bidType;
 
     @NotNull(message = "must not be null")
-    private String description;
+    private Double bidAmount;
 
-    @NotNull(message = "must not be null")
-    private String country;
+    private String comments;
 
-    @NotNull(message = "must not be null")
-    private Integer postcode;
+    private BidStatus bidStatus;
 
-    private Integer expectedNoOfHours;
-
-    @NotNull(message = "must not be null")
-    private Instant dueDateTime;
+    private Long projectId;
 
     private String createdBy;
 
@@ -43,13 +38,5 @@ public class ProjectDTO implements Serializable {
 
     private Instant lastModifiedDate;
 
-    @NotNull(message = "must not be null")
-    private String summary;
-
-    private Long budget;
-
-    private ProjectStatus status;
-
-    private Long assignedBidId;
 
 }

@@ -3,6 +3,7 @@ package com.smartbidder.service;
 
 import com.smartbidder.domain.Project;
 import com.smartbidder.domain.ProjectDTO;
+import com.smartbidder.domain.ProjectStatus;
 import com.smartbidder.repository.ProjectRepository;
 import com.smartbidder.service.mapper.ProjectMapper;
 import org.slf4j.Logger;
@@ -39,6 +40,7 @@ public class ProjectService {
         Project project = projectMapper.toEntity(projectDTO);
         project.setCreatedBy("devuser");
         project.setLastModifiedBy("devuser");
+        project.setStatus(ProjectStatus.OPEN);
         return projectRepository.save(project).map(projectMapper::toDto);
     }
 

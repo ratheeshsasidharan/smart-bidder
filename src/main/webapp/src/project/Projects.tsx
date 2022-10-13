@@ -14,6 +14,7 @@ import {Button, Table} from "reactstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import InfiniteScroll from "react-infinite-scroll-component";
 import {IProject} from "../model/Project.model";
+import {setProjectIdForBidList} from "../project-bid/ProjectBid.reducer";
 
 export const Projects = () => {
     const dispatch = useDispatch();
@@ -80,8 +81,9 @@ export const Projects = () => {
         setSorting(true);
     };
 
-    const viewProject = (project) =>{
+    const viewProject = (project:IProject) =>{
         dispatch(selectProject(project));
+        dispatch(setProjectIdForBidList(project.id));
     }
 
     return (
@@ -115,8 +117,10 @@ export const Projects = () => {
                                     Category 
                                 </th>
                                 <th className="hand" >
-                                    Description{' '}
-                                    
+                                    Summary{' '}
+                                </th>
+                                <th className="hand" >
+                                    Status
                                 </th>
                                 <th className="hand" >
                                     Country 
@@ -133,7 +137,8 @@ export const Projects = () => {
                                     <td>
                                         {project.category}
                                     </td>
-                                    <td>{project.description}</td>
+                                    <td>{project.summary}</td>
+                                    <td>{project.status}</td>
                                     <td>{project.country}</td>
                                     <td>{project.postcode}</td>
                                 </tr>
@@ -142,7 +147,7 @@ export const Projects = () => {
                         </Table>
                     ) : (
                         !loading && (
-                            <div className="alert alert-warning">
+                            <div>
                                 No Projects found
                             </div>
                         )

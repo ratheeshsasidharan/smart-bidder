@@ -16,7 +16,7 @@ import java.time.Instant;
 @Data
 @AllArgsConstructor
 @Builder
-public class Project extends AbstractAuditingEntity<Long> implements Serializable {
+public class Project extends AuditingEntity<Long> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -45,6 +45,19 @@ public class Project extends AbstractAuditingEntity<Long> implements Serializabl
     @NotNull(message = "must not be null")
     @Column("due_date_time")
     private Instant dueDateTime;
+
+    @NotNull(message = "must not be null")
+    @Column("summary")
+    private String summary;
+
+    @Column("budget")
+    private Long budget;
+
+    @Column("status")
+    private ProjectStatus status;
+
+    @Column("assigned_bid_id")
+    private Long assignedBidId;
 
 
 }

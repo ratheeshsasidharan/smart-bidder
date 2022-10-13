@@ -38,9 +38,7 @@ public class ExceptionTranslator implements ProblemHandling {
         this.env = env;
     }
 
-    /**
-     * Post-process the Problem payload to add the message key for the front-end if needed.
-     */
+
     @Override
     public Mono<ResponseEntity<Problem>> process(@Nullable ResponseEntity<Problem> entity, ServerWebExchange request) {
         if (entity == null) {
@@ -107,7 +105,7 @@ public class ExceptionTranslator implements ProblemHandling {
         return create(
                 problem,
                 request,
-                HeaderUtil.createFailureAlert(true, problem.getEntityName(), problem.getErrorKey(), problem.getMessage())
+                HeaderUtil.createFailureAlert(problem.getEntityName(), problem.getErrorKey(), problem.getMessage())
         );
     }
 
@@ -125,7 +123,7 @@ public class ExceptionTranslator implements ProblemHandling {
         return create(
                 ex,
                 request,
-                HeaderUtil.createFailureAlert(true, ex.getEntityName(), ex.getErrorKey(), ex.getMessage())
+                HeaderUtil.createFailureAlert(ex.getEntityName(), ex.getErrorKey(), ex.getMessage())
         );
     }
 
@@ -148,8 +146,4 @@ public class ExceptionTranslator implements ProblemHandling {
                 );
     }
 
-    private boolean containsPackageName(String message) {
-        // This list is for sure not complete
-        return StringUtils.containsAny(message, "org.", "java.", "net.", "javax.", "com.", "io.", "de.", "com.projectbidding");
-    }
 }
