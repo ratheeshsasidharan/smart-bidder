@@ -97,19 +97,19 @@ public class ProjectResource {
     public Mono<ResponseEntity<List<ProjectDTO>>> getAllProjects(@org.springdoc.api.annotations.ParameterObject Pageable pageable,ServerHttpRequest request) {
         log.debug("REST request to get a page of Projects");
         return projectService
-                .countAll()
-                .zipWith(projectService.findAll(pageable).collectList())
-                .map(countWithEntities ->
-                        ResponseEntity
-                                .ok()
-                                .headers(
-                                        PaginationUtil.generatePaginationHttpHeaders(
-                                                UriComponentsBuilder.fromHttpRequest(request),
-                                                new PageImpl<>(countWithEntities.getT2(), pageable, countWithEntities.getT1())
-                                        )
-                                )
-                                .body(countWithEntities.getT2())
-                );
+            .countAll()
+            .zipWith(projectService.findAll(pageable).collectList())
+            .map(countWithEntities ->
+                    ResponseEntity
+                            .ok()
+                            .headers(
+                                    PaginationUtil.generatePaginationHttpHeaders(
+                                            UriComponentsBuilder.fromHttpRequest(request),
+                                            new PageImpl<>(countWithEntities.getT2(), pageable, countWithEntities.getT1())
+                                    )
+                            )
+                            .body(countWithEntities.getT2())
+            );
     }
 
 

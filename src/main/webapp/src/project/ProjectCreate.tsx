@@ -43,7 +43,7 @@ export const ProjectCreate = () => {
         <div>
             <form onSubmit={handleSubmit(onSubmit)}>
             <Row className="justify-content-center">
-                <Col md="12">
+                <Col md="8">
                     <h2 id="createNewProject">
                         Post a new Project
                     </h2>
@@ -100,7 +100,7 @@ export const ProjectCreate = () => {
 
                 <Row className="justify-content-center">
                     <Col md="4" class="form-group">
-                        <label htmlFor="dueDateTime">Due Date and Time</label>
+                        <label htmlFor="dueDateTime">Cut Off Time For Bidding</label>
                         <input className="form-control" type="datetime-local" defaultValue="" {...register("dueDateTime")} />
                     </Col>
                     <Col md="4" class="form-group">

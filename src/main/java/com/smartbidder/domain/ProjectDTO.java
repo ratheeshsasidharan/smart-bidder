@@ -37,6 +37,8 @@ public class ProjectDTO implements Serializable {
 
     private String createdBy;
 
+    private String createdByFullName;
+
     private Instant createdDate;
 
     private String lastModifiedBy;

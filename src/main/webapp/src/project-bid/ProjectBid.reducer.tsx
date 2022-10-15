@@ -1,7 +1,8 @@
-import axios from "axios";
+import axios, {AxiosError} from "axios";
 import {loadMoreDataWhenScrolled, parseHeaderForLinks} from "../shared/PaginationUtil";
 import {defaultValue, IProjectBid, IQueryParamsBid, ProjectBidState} from "../model/project-bid.model";
-import {createAsyncThunk, createSlice, isFulfilled} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice, isFulfilled, SerializedError} from "@reduxjs/toolkit";
+import {serializeAxiosError} from "../reducers/reducer.utils";
 
 const initialState: ProjectBidState = {
     loading: false,
@@ -20,17 +21,18 @@ axios.defaults.baseURL = url;
 
 const apiUrl = 'api/project-bids';
 
+
+
 export const getProjectBids = createAsyncThunk('project/get_bid_list', async ({ page, size, sort,projectId }: IQueryParamsBid) => {
     const requestUrl = `api/projects/${projectId}/project-bids${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}cacheBuster=${new Date().getTime()}`;
-    console.log('requestUrl'+requestUrl);
     return axios.get<IProjectBid[]>(requestUrl);
-});
+},{ serializeError: serializeAxiosError });
 
 export const createProjectBid = createAsyncThunk(
     'project/create_project',
     async (entity: IProjectBid, thunkAPI) => {
         return axios.post<IProjectBid>(apiUrl, entity);
-    }
+    },{ serializeError: serializeAxiosError }
 );
 
 export const ProjectBidSlice = createSlice({

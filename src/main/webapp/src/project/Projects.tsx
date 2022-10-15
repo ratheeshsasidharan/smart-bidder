@@ -93,13 +93,8 @@ export const Projects = () => {
                 <div className="d-flex justify-content-end">
                     <Button className="me-2" color="info" onClick={refreshList} disabled={loading}>
                         <FontAwesomeIcon icon="sync" spin={loading} />{' '}
-                        Refresh List
+                        Refresh
                     </Button>
-                    <Link to="/project/new" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
-                        <FontAwesomeIcon icon="plus" />
-                        &nbsp;
-                        Create new Project
-                    </Link>
                 </div>
             </h4>
             <div className="table-responsive">
@@ -123,7 +118,7 @@ export const Projects = () => {
                                     Status
                                 </th>
                                 <th className="hand" >
-                                    Country 
+                                    Posted By
                                 </th>
                                 <th className="hand" >
                                     Postcode 
@@ -139,7 +134,7 @@ export const Projects = () => {
                                     </td>
                                     <td>{project.summary}</td>
                                     <td>{project.status}</td>
-                                    <td>{project.country}</td>
+                                    <td>{project.createdByFullName}</td>
                                     <td>{project.postcode}</td>
                                 </tr>
                             ))}

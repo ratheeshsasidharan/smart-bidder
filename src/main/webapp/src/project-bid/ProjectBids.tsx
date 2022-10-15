@@ -29,7 +29,6 @@ export const ProjectBids = () => {
     const entity = useAppSelector(state => state.projectBid.entity);
     const updateSuccess = useAppSelector(state => state.projectBid.updateSuccess);
     const projectId = useAppSelector(state => state.projectBid.projectId);
-    console.log('projectId'+projectId);
 
     const dispatch = useDispatch();
 

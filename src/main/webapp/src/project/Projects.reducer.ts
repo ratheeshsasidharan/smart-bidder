@@ -2,6 +2,7 @@ import {defaultValue, IProject, IQueryParams, ProjectsState} from "../model/Proj
 import {createAsyncThunk, createSlice, isFulfilled} from "@reduxjs/toolkit";
 import axios from "axios";
 import {loadMoreDataWhenScrolled, parseHeaderForLinks} from "../shared/PaginationUtil";
+import {serializeAxiosError} from "../reducers/reducer.utils";
 
 const initialState: ProjectsState = {
     loading: false,
@@ -22,13 +23,13 @@ const apiUrl = 'api/projects';
 export const getProjects = createAsyncThunk('project/get_project_list', async ({ page, size, sort }: IQueryParams) => {
     const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}cacheBuster=${new Date().getTime()}`;
     return axios.get<IProject[]>(requestUrl);
-});
+},{ serializeError: serializeAxiosError });
 
 export const createProject = createAsyncThunk(
     'project/create_project',
     async (entity: IProject, thunkAPI) => {
         return axios.post<IProject>(apiUrl, entity);
-    }
+    },{ serializeError: serializeAxiosError }
 );
 
 export const ProjectSlice = createSlice({

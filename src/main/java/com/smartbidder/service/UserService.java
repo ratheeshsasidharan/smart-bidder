@@ -3,8 +3,10 @@ package com.smartbidder.service;
 import com.smartbidder.domain.UserDetails;
 import com.smartbidder.domain.UserDTO;
 import com.smartbidder.repository.UserRepository;
+import com.smartbidder.security.SecurityUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
@@ -15,6 +17,7 @@ import reactor.core.publisher.Mono;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public Mono<UserDetails> createUser(UserDTO userDTO) {
@@ -30,8 +33,8 @@ public class UserService {
         }
         return Mono.just(userDetails)
                 .map(newUserDetails -> {
-                    //String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
-                    //newUser.setPassword(encryptedPassword);
+                    String encryptedPassword = passwordEncoder.encode(userDetails.getPassword());
+                    newUserDetails.setPassword(encryptedPassword);
                     newUserDetails.setActivated(true);
                     return newUserDetails;
                 })
@@ -40,4 +43,12 @@ public class UserService {
     }
 
 
+    @Transactional(readOnly = true)
+    public Mono<UserDetails> getLoggedInUserDetails() {
+        return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneByLogin);
+    }
+
+    public Mono<UserDetails> findUserByLogin(String login){
+        return userRepository.findOneByLogin(login);
+    }
 }

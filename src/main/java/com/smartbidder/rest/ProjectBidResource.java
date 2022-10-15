@@ -2,10 +2,13 @@ package com.smartbidder.rest;
 
 import com.smartbidder.domain.ProjectBidDTO;
 import com.smartbidder.exception.BadRequestAlertException;
+import com.smartbidder.security.SecurityUtils;
 import com.smartbidder.service.ProjectBidService;
+import com.smartbidder.service.ProjectService;
 import com.smartbidder.util.HeaderUtil;
 import com.smartbidder.util.PaginationUtil;
 import com.smartbidder.util.ResponseUtil;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -32,17 +36,14 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/api/project-bids")
 @Slf4j
+@AllArgsConstructor
 public class ProjectBidResource {
 
     private static final String ENTITY_NAME = "projectBid";
 
 
     private final ProjectBidService projectBidService;
-
-
-    public ProjectBidResource(ProjectBidService projectBidService) {
-        this.projectBidService = projectBidService;
-    }
+    private final ProjectService projectService;
 
 
     @PostMapping("")
@@ -51,18 +52,28 @@ public class ProjectBidResource {
         if (projectBidDTO.getId() != null) {
             throw new BadRequestAlertException("A new projectBid cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        return projectBidService
-            .save(projectBidDTO)
-            .map(result -> {
-                try {
-                    return ResponseEntity
-                        .created(new URI("/api/project-bids/" + result.getId()))
-                        .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-                        .body(result);
-                } catch (URISyntaxException e) {
-                    throw new RuntimeException(e);
+       return SecurityUtils.getCurrentUserLogin().flatMap(login -> {
+            return projectService.findOne(projectBidDTO.getProjectId()).flatMap(projectDTO -> {
+                if (projectDTO.getCreatedBy().equals(login)) {
+                    return Mono.error(new BadRequestAlertException("Bidder cannot be same as creator", ENTITY_NAME, "bidderAndCreatorSame"));
                 }
+                return projectBidService
+                        .save(projectBidDTO)
+                        .map(ProjectBidResource::createProjectBidDTOResponseEntity);
             });
+        });
+
+    }
+
+    private static ResponseEntity<ProjectBidDTO> createProjectBidDTOResponseEntity(ProjectBidDTO result) {
+        try {
+            return ResponseEntity
+                    .created(new URI("/api/project-bids/" + result.getId()))
+                    .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+                    .body(result);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 

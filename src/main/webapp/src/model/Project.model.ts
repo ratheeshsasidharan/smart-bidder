@@ -13,6 +13,9 @@ export interface IProject {
   budget?: number | null;
   status?: ProjectStatus | null;
   assignedBidId?: number | null;
+  createdBy?: string;
+  createdByFullName?: string;
+  createdDate?: string;
 }
 
 export interface ProjectsState {

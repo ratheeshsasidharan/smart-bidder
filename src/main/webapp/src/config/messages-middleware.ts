@@ -21,7 +21,7 @@ function isRejectedAction(action: AnyAction) {
 export default () => next => action => {
   const { error, payload } = action;
   console.log(action);
-  console.log(payload);
+  console.log(error);
 
   if (isFulfilledAction(action) && payload && payload.headers) {
     const headers = payload?.headers;
@@ -39,11 +39,10 @@ export default () => next => action => {
     }
   }
   if (isRejectedAction(action) && error && error.isAxiosError) {
+    console.log(error);
     if (error.response) {
       const response = error.response;
       const data = response.data;
-      console.log(response);
-      console.log(data);
       if (
         !(
           response.status === 401 &&
@@ -100,13 +99,18 @@ export default () => next => action => {
             }
         }
       }
-    } else if (error.config && error.config.url === 'api/account' && error.config.method === 'get') {
+    } else if (error.config && error.config.url === 'api/account' && error.config.method === 'get') { //authentication/get_account/
       console.log('Authentication Error: Trying to access url api/account with GET.');
     } else {
       toast.error(error.message || 'Unknown error!');
     }
   } else if (error) {
-    toast.error(error.message || 'Unknown error!');
+    if(action && action.type.endsWith("get_account/rejected")){
+      console.log('Authentication Error: Trying to access url api/account with GET.');
+    }
+    else {
+      toast.error(error.message || 'Unknown error!');
+    }
   }
 
   return next(action);
