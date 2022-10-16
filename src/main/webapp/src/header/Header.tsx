@@ -36,7 +36,7 @@ const Header = () => {
                         <NavItem>
                             <NavLink tag={Link} to="/logout" className="d-flex align-items-center">
                                 <FontAwesomeIcon icon="sign-in-alt"/>
-                                <span>&nbsp;Logout (<span style={{color:"yellow"}}>{account.firstName} {account.lastName}</span>)</span>
+                                <span>&nbsp;Logout (<span className="labelHeading">{account.firstName} {account.lastName}</span>)</span>
                             </NavLink>
                         </NavItem>
                     </Nav>

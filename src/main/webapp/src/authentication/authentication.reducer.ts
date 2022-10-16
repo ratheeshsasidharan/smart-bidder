@@ -8,16 +8,9 @@ let url = window.location.protocol + '//' + window.location.host;
 axios.defaults.baseURL = url;
 
 export const initialState = {
-    loading: false,
     isAuthenticated: false,
-    loginSuccess: false,
-    loginError: false, // Errors returned from server side
-    showModalLogin: false,
     account: {} as any,
-    errorMessage: null as unknown as string, // Errors returned from server side
-    redirectMessage: null as unknown as string,
-    sessionHasBeenFetched: false,
-    logoutUrl: null as unknown as string,
+    errorMessage: null as unknown as string
 };
 
 export type AuthenticationState = Readonly<typeof initialState>;
@@ -63,7 +56,6 @@ export const clearAuthToken = () => {
 };
 
 export const logout: () => AppThunk = () => dispatch => {
-    console.log(logout);
     clearAuthToken();
     dispatch(logoutSession());
 };
@@ -80,22 +72,17 @@ export const AuthenticationSlice = createSlice({
     reducers: {
         logoutSession() {
             return {
-                ...initialState,
-                showModalLogin: true,
+                ...initialState
             };
         },
         authError(state, action) {
             return {
-                ...state,
-                showModalLogin: true,
-                redirectMessage: action.payload,
+                ...state
             };
         },
         clearAuth(state) {
             return {
                 ...state,
-                loading: false,
-                showModalLogin: true,
                 isAuthenticated: false,
             };
         },
@@ -104,23 +91,14 @@ export const AuthenticationSlice = createSlice({
         builder
             .addCase(authenticate.rejected, (state, action) => ({
                 ...initialState,
-                errorMessage: action.error.message,
-                showModalLogin: true,
-                loginError: true,
+                errorMessage: action.error.message
             }))
             .addCase(authenticate.fulfilled, state => ({
-                ...state,
-                loading: false,
-                loginError: false,
-                showModalLogin: false,
-                loginSuccess: true,
+                ...state
             }))
             .addCase(getAccount.rejected, (state, action) => ({
                 ...state,
-                loading: false,
                 isAuthenticated: false,
-                sessionHasBeenFetched: true,
-                showModalLogin: true,
                 errorMessage: action.error.message,
             }))
             .addCase(getAccount.fulfilled, (state, action) => {
@@ -128,16 +106,8 @@ export const AuthenticationSlice = createSlice({
                 return {
                     ...state,
                     isAuthenticated,
-                    loading: false,
-                    sessionHasBeenFetched: true,
                     account: action.payload.data,
                 };
-            })
-            .addCase(authenticate.pending, state => {
-                state.loading = true;
-            })
-            .addCase(getAccount.pending, state => {
-                state.loading = true;
             });
     },
 });

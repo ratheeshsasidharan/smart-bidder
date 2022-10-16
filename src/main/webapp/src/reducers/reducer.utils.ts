@@ -14,7 +14,6 @@ export const serializeAxiosError = (value: any): AxiosError | SerializedError =>
                     simpleError[property] = value[property];
                 }
             }
-
             return simpleError;
         }
     }

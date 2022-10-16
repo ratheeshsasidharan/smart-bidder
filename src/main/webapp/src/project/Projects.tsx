@@ -108,9 +108,9 @@ export const Projects = () => {
     }
 
     const projStatColorMap = {};
-    projStatColorMap['OPEN'] = 'primary';
-    projStatColorMap['ACCEPTED'] = 'success';
-    projStatColorMap['DECLINED'] = 'warning';
+    projStatColorMap['OPEN'] = 'info';
+    projStatColorMap['ASSIGNED'] = 'primary';
+    projStatColorMap['COMPLETED'] = 'primary';
     projStatColorMap['CANCELLED'] = 'warning';
 
     return (
@@ -151,19 +151,19 @@ export const Projects = () => {
                         <Table responsive>
                             <thead>
                             <tr>
-                                <th className="hand">
+                                <th className="labelHeading">
                                     Category 
                                 </th>
-                                <th className="hand" >
+                                <th className="labelHeading" >
                                     Summary{' '}
                                 </th>
-                                <th className="hand" >
+                                <th className="labelHeading">
                                     Status
                                 </th>
-                                <th className="hand" >
+                                <th className="labelHeading">
                                     Posted By
                                 </th>
-                                <th className="hand" >
+                                <th className="labelHeading">
                                     Postcode 
                                 </th>
                                 <th />

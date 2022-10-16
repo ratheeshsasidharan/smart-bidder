@@ -72,9 +72,9 @@ export const ProjectBids = () => {
 
     const bidStatColorMap = {};
     bidStatColorMap['OPEN'] = 'primary';
-    bidStatColorMap['ASSIGNED'] = 'success';
+    bidStatColorMap['ACCEPTED'] = 'info';
     bidStatColorMap['CANCELLED'] = 'warning';
-    bidStatColorMap['COMPLETED'] = 'success';
+    bidStatColorMap['DECLINED'] = 'warning';
 
 
     return (
@@ -95,7 +95,7 @@ export const ProjectBids = () => {
                                 <Card>
                                     <Row style={{paddingTop:"10px"}}>
                                         <Col md="8">
-                                            <label>{projectBid.createdByFullName} placed a bid of {projectBid.bidAmount} {projectBid.bidType}&nbsp;&nbsp;</label>
+                                            <label className="labelHeading">{projectBid.createdByFullName} placed a bid of {projectBid.bidAmount} {projectBid.bidType}&nbsp;&nbsp;</label>
                                             <Badge color={bidStatColorMap[projectBid.bidStatus] as string}>{projectBid.bidStatus}</Badge>
                                         </Col>
                                         <Col md="4">

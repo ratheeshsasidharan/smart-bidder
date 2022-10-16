@@ -20,9 +20,6 @@ function isRejectedAction(action: AnyAction) {
 
 export default () => next => action => {
   const { error, payload } = action;
-  console.log(action);
-  console.log(error);
-
   if (isFulfilledAction(action) && payload && payload.headers) {
     const headers = payload?.headers;
     let alert: string | null = null;
@@ -39,7 +36,6 @@ export default () => next => action => {
     }
   }
   if (isRejectedAction(action) && error && error.isAxiosError) {
-    console.log(error);
     if (error.response) {
       const response = error.response;
       const data = response.data;
@@ -50,7 +46,6 @@ export default () => next => action => {
         )
       ) {
         switch (response.status) {
-          // connection refused, server not reachable
           case 0:
             addErrorAlert('Server not reachable', 'error.server.not.reachable');
             break;

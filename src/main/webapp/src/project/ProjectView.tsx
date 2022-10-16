@@ -68,7 +68,7 @@ export const ProjectView = () => {
           </Row>
           <Row style={{paddingTop:"20px"}}>
               <Col md="4">
-                  <label>Posted By : </label>
+                  <label className="labelHeading">Posted By : </label>
               </Col>
               <Col md="8">
                   <label className="labelStyle2">{projectEntity.createdByFullName}({moment(projectEntity.createdDate).format("DD/MM/YYYY HH:mm")})</label>
@@ -76,7 +76,7 @@ export const ProjectView = () => {
           </Row>
           <Row style={{paddingTop:"20px"}}>
               <Col md="4">
-                  <label>Category : </label>
+                  <label className="labelHeading">Category : </label>
               </Col>
               <Col md="4">
                   <label className="labelStyle2">{projectEntity.category}</label>
@@ -84,7 +84,7 @@ export const ProjectView = () => {
           </Row>
           <Row style={{paddingTop:"20px"}}>
               <Col md="4">
-                  <label>Summary : </label>
+                  <label className="labelHeading">Summary : </label>
               </Col>
               <Col md="8">
                   <label className="labelStyle2">{projectEntity.summary}</label>
@@ -92,7 +92,7 @@ export const ProjectView = () => {
           </Row>
           <Row style={{paddingTop:"20px"}}>
               <Col md="4">
-                  <label>Status : </label>
+                  <label className="labelHeading">Status : </label>
               </Col>
               <Col md="8">
                   <label className="labelStyle2">{projectEntity.status}</label>
@@ -100,7 +100,7 @@ export const ProjectView = () => {
           </Row>
           <Row style={{paddingTop:"20px"}}>
               <Col md="4">
-                  <label>Budget : </label>
+                  <label className="labelHeading">Budget : </label>
               </Col>
               <Col md="4">
                   <label className="labelStyle2">{projectEntity.budget}</label>
@@ -108,7 +108,7 @@ export const ProjectView = () => {
           </Row>
           <Row style={{paddingTop:"20px"}}>
               <Col md="4">
-                  <label>Country : </label>
+                  <label className="labelHeading">Country : </label>
               </Col>
               <Col md="8">
                   <label className="labelStyle2">{projectEntity.country}</label>
@@ -116,7 +116,7 @@ export const ProjectView = () => {
           </Row>
           <Row style={{paddingTop:"20px"}}>
               <Col md="4">
-                  <label>Postcode : </label>
+                  <label className="labelHeading">Postcode : </label>
               </Col>
               <Col md="8">
                   <label className="labelStyle2">{projectEntity.postcode}</label>
@@ -124,7 +124,7 @@ export const ProjectView = () => {
           </Row>
           <Row style={{paddingTop:"20px"}}>
               <Col md="4">
-                  <label>Expected No Of Hours : </label>
+                  <label className="labelHeading">Expected No Of Hours : </label>
               </Col>
               <Col md="8">
                   <label className="labelStyle2">{projectEntity.expectedNoOfHours}</label>
@@ -132,7 +132,7 @@ export const ProjectView = () => {
           </Row>
           <Row style={{paddingTop:"20px"}}>
               <Col md="4">
-                  <label>Cut Off Time For Bidding : </label>
+                  <label className="labelHeading">Cut Off Time For Bidding : </label>
               </Col>
               <Col md="8">
                   <label className="labelStyle2">{moment(projectEntity.dueDateTime).format("DD/MM/YYYY HH:mm:ss")}</label>
@@ -140,7 +140,7 @@ export const ProjectView = () => {
           </Row>
           <Row style={{paddingTop:"20px"}}>
               <Col md="4">
-                  <label >Description : </label>
+                  <label className="labelHeading">Description : </label>
               </Col>
               <Col md="8">
                   <label className="labelStyle2">{projectEntity.description}</label>

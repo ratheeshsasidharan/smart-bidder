@@ -64,7 +64,7 @@ export const ProjectBidCreate = () => {
                 </Row>
                 <Row className="justify-content-center">
                     <Col md="4" class="form-group">
-                        <label htmlFor="bidTypeSelect">Bid Type</label>
+                        <label htmlFor="bidTypeSelect" className="labelHeading">Bid Type</label>
                         <select
                             {...register("bidType")}
                             className="form-control" id="bidTypeSelect"
@@ -78,7 +78,7 @@ export const ProjectBidCreate = () => {
                         </select>
                     </Col>
                     <Col md="4" class="form-group">
-                        <label htmlFor="bidAmount">Amount</label>
+                        <label htmlFor="bidAmount" className="labelHeading">Amount</label>
                         <input className="form-control" defaultValue={projectBidEntity.bidAmount} {...register("bidAmount",{
                             required: "Required",
                             pattern: {
@@ -93,7 +93,7 @@ export const ProjectBidCreate = () => {
 
                 <Row className="justify-content-center">
                     <Col md="8" class="form-group">
-                        <label htmlFor="comments">Comments</label>
+                        <label htmlFor="comments" className="labelHeading">Comments</label>
                         <input type="text" className="form-control" defaultValue={projectBidEntity.comments} {...register("comments",{maxLength: 255 })} />
                         {errors.comments && errors.comments.type === "maxLength" && (
                             <span role="alert">Max length exceeded</span>
