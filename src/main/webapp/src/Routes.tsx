@@ -16,7 +16,9 @@ const AppRoutes = () => {
                 <Route path="projects/new" element={<ProjectCreate/>}></Route>
                 <Route path="projects/home" element={<ProjectHome/>}></Route>
                 <Route path="projects/view" element={<ProjectView/>}></Route>
-                <Route path="project-bids/edit/:projectId" element={<ProjectBidCreate/>}></Route>
+                <Route path="project-bids/new/:projectId" element={<ProjectBidCreate/>}></Route>
+                <Route path="projects/:projectId/edit" element={<ProjectCreate/>}></Route>
+                <Route path="project-bids/:projectBidId/edit" element={<ProjectBidCreate/>}></Route>
                 <Route path="login" element={<Login/>}></Route>
                 <Route path="logout" element={<Logout/>}></Route>
                 <Route path="*" element={<Navigate to="projects/home" replace />} />

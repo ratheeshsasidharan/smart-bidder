@@ -5,31 +5,42 @@ import 'react-bootstrap-country-select/dist/react-bootstrap-country-select.css';
 import {Country} from "../model/enumerations/country.model";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {useAppDispatch, useAppSelector} from "../config/store";
-import {createProject} from "./Projects.reducer";
+import {createProject, resetAfterProjectCreate, updateProject} from "./Projects.reducer";
 import moment from 'moment';
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {useEffect} from "react";
+import {defaultValue, IProject} from "../model/Project.model";
 
 export const ProjectCreate = () => {
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
-
+    const { projectId } = useParams<'projectId'>();
+    const isNewProject = projectId === undefined;
     const projectCategoryValues = Object.keys(ProjectCategory);
     const countryValues = Object.keys(Country);
     const navigate = useNavigate();
-
-    const projectEntity = useAppSelector(state => state.project.entity);
+    let projectEntity:IProject = useAppSelector(state => state.project.entity);
+    if(isNewProject){
+        projectEntity = defaultValue;
+    }
     const updateSuccess = useAppSelector(state => state.project.updateSuccess);
     const dispatch = useAppDispatch();
     const onSubmit = data => {
         const dueDateTime = moment(data.dueDateTime).utc(true).format();
         const projectDataNew = {
+            ...projectEntity,
             ...data,
             dueDateTime
         };
-        dispatch(createProject(projectDataNew));
+        if(isNewProject) {
+            dispatch(createProject(projectDataNew));
+        }
+        else{
+            dispatch(updateProject(projectDataNew));
+        }
     }
 
     const handleClose = () => {
+        dispatch(resetAfterProjectCreate());
         navigate('/projects/home');
     };
 
@@ -45,14 +56,14 @@ export const ProjectCreate = () => {
             <Row className="justify-content-center">
                 <Col md="8">
                     <h2 id="createNewProject">
-                        Post a new Project
+                        {isNewProject?"Post a new Project":"Modify Project"}
                     </h2>
                 </Col>
             </Row>
                 <Row className="justify-content-center">
                     <Col md="8" class="form-group">
                         <label htmlFor="summary">Summary</label>
-                        <input className="form-control" defaultValue="" {...register("summary")} />
+                        <input className="form-control" defaultValue={projectEntity.summary} {...register("summary")} />
                     </Col>
                 </Row>
             <Row className="justify-content-center">
@@ -61,6 +72,7 @@ export const ProjectCreate = () => {
                     <select
                         {...register("category")}
                         className="form-control" id="categorySelect"
+                        defaultValue={projectEntity.category}
                     >
                         {projectCategoryValues.map(projectCategory => (
                             <option value={projectCategory} key={projectCategory}>
@@ -74,7 +86,7 @@ export const ProjectCreate = () => {
                     <select
                         {...register("country")}
                         className="form-control" id="countrySelect"
-                        defaultValue="Australia"
+                        defaultValue={projectEntity.summary}
                     >
                         {countryValues.map(country => (
                             <option value={country} key={country}>
@@ -89,11 +101,11 @@ export const ProjectCreate = () => {
             <Row className="justify-content-center">
                 <Col md="4" class="form-group">
                     <label htmlFor="postcode">Postcode</label>
-                    <input className="form-control" defaultValue="" {...register("postcode")} />
+                    <input className="form-control" defaultValue={projectEntity.postcode} {...register("postcode")} />
                 </Col>
                 <Col md="4" class="form-group">
                     <label htmlFor="expectedNoOfHours">Expected Time (Hours)</label>
-                    <input className="form-control" defaultValue="" {...register("expectedNoOfHours")} />
+                    <input className="form-control" defaultValue={projectEntity.expectedNoOfHours} {...register("expectedNoOfHours")} />
                 </Col>
             </Row>
 
@@ -101,11 +113,11 @@ export const ProjectCreate = () => {
                 <Row className="justify-content-center">
                     <Col md="4" class="form-group">
                         <label htmlFor="dueDateTime">Cut Off Time For Bidding</label>
-                        <input className="form-control" type="datetime-local" defaultValue="" {...register("dueDateTime")} />
+                        <input className="form-control" type="datetime-local" defaultValue={moment(projectEntity.dueDateTime).format("yyyy-MM-DDThh:mm")} {...register("dueDateTime")} />
                     </Col>
                     <Col md="4" class="form-group">
                         <label htmlFor="budget">Budget</label>
-                        <input className="form-control" defaultValue="" {...register("budget")} />
+                        <input className="form-control" defaultValue={projectEntity.budget} {...register("budget")} />
                     </Col>
                 </Row>
 
@@ -113,7 +125,7 @@ export const ProjectCreate = () => {
                 <Row className="justify-content-center">
                     <Col md="8" class="form-group">
                         <label htmlFor="description">Description</label>
-                        <input type="text" className="form-control" defaultValue="" {...register("description")} />
+                        <input type="text" className="form-control" defaultValue={projectEntity.description} {...register("description")} />
                     </Col>
                 </Row>
                 <Row className="justify-content-center" style={{paddingTop:"20px"}}>

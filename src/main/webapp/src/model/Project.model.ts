@@ -27,8 +27,9 @@ export interface ProjectsState {
   updating: boolean;
   totalItems?: number;
   updateSuccess: boolean;
+  searchType?:string;
 }
 
-export type IQueryParams = { query?: string; page?: number; size?: number; sort?: string };
+export type IQueryParams = { query?: string; page?: number; size?: number; sort?: string;searchType?:string };
 
 export const defaultValue: Readonly<IProject> = {};

@@ -6,6 +6,8 @@ import moment from "moment/moment";
 import {useNavigate} from "react-router-dom";
 import ProjectBids from "../project-bid/ProjectBids";
 import {resetProjectBid} from "../project-bid/ProjectBid.reducer";
+import {updateProject} from "./Projects.reducer";
+import {ProjectStatus} from "../model/enumerations/project-status.model";
 
 export const ProjectView = () => {
     const projectEntity:IProject = useAppSelector(state => state.project.entity);
@@ -15,6 +17,14 @@ export const ProjectView = () => {
         dispatch(resetProjectBid());
         navigate(`/project-bids/new/${projectId}`);
     };
+    const goToProjectEdit = (projectId) => {
+        navigate(`/projects/${projectId}/edit`);
+    };
+
+    const cancelProject = (projectId) => {
+        dispatch(updateProject({...projectEntity,status:ProjectStatus.CANCELLED}));
+    };
+
     const loggedInUser = useAppSelector(state => state.authentication.account).login;
     const isCreatorSameAsLoggedInUser = loggedInUser===projectEntity.createdBy;
 
@@ -27,15 +37,17 @@ export const ProjectView = () => {
                   </h4>
               </Col>
               <Col md="4" class="form-group" style={{textAlign:"right"}}>
-                  {isCreatorSameAsLoggedInUser &&
+                  {isCreatorSameAsLoggedInUser && projectEntity.status===ProjectStatus.OPEN &&
                       <>
-                      <Button to={`/project/${projectEntity.id}/edit`} replace color="primary">
+                      <Button to={`/projects/${projectEntity.id}/edit`} replace color="primary"
+                              onClick={() => goToProjectEdit(projectEntity.id)}>
                           <FontAwesomeIcon icon="pencil-alt"/>{' '}
                           <span className="d-none d-md-inline">
                         Edit
                       </span>
                       </Button>
-                      <Button to={`/project/${projectEntity.id}/edit`} replace color="primary" style={{marginLeft:"10px"}}>
+                      <Button to={`/projects/${projectEntity.id}/cancel`} replace color="primary" style={{marginLeft:"10px"}}
+                              onClick={() => cancelProject(projectEntity.id)}>
                           <FontAwesomeIcon icon="pencil-alt"/>{' '}
                           <span className="d-none d-md-inline">
                           Cancel
@@ -43,7 +55,7 @@ export const ProjectView = () => {
                       </Button>
                       </>
                   }
-                  {!isCreatorSameAsLoggedInUser &&
+                  {!isCreatorSameAsLoggedInUser && projectEntity.status===ProjectStatus.OPEN &&
                       <Button to={`project-bids/new/${projectEntity.id}`} replace color="primary"
                               onClick={() => goToBid(projectEntity.id)} style={{margin: "10px"}}>
                           <FontAwesomeIcon icon="pencil-alt"/>{' '}
@@ -59,7 +71,7 @@ export const ProjectView = () => {
                   <label>Posted By : </label>
               </Col>
               <Col md="8">
-                  <label style={{color:"yellow"}}>{projectEntity.createdByFullName}({moment(projectEntity.createdDate).format("DD/MM/YYYY HH:mm")})</label>
+                  <label style={{color:'lightseagreen'}}>{projectEntity.createdByFullName}({moment(projectEntity.createdDate).format("DD/MM/YYYY HH:mm")})</label>
               </Col>
           </Row>
           <Row style={{paddingTop:"20px"}}>
@@ -67,7 +79,7 @@ export const ProjectView = () => {
                   <label>Category : </label>
               </Col>
               <Col md="4">
-                  <label style={{color:"yellow"}}>{projectEntity.category}</label>
+                  <label style={{color:'#66AA99'}}>{projectEntity.category}</label>
               </Col>
           </Row>
           <Row style={{paddingTop:"20px"}}>
@@ -75,7 +87,7 @@ export const ProjectView = () => {
                   <label>Summary : </label>
               </Col>
               <Col md="8">
-                  <label style={{color:"yellow"}}>{projectEntity.summary}</label>
+                  <label style={{color:'#779988'}}>{projectEntity.summary}</label>
               </Col>
           </Row>
           <Row style={{paddingTop:"20px"}}>
@@ -83,7 +95,7 @@ export const ProjectView = () => {
                   <label>Status : </label>
               </Col>
               <Col md="8">
-                  <label style={{color:"yellow"}}>{projectEntity.status}</label>
+                  <label style={{color:"darkcyan"}}>{projectEntity.status}</label>
               </Col>
           </Row>
           <Row style={{paddingTop:"20px"}}>
@@ -91,7 +103,7 @@ export const ProjectView = () => {
                   <label>Budget : </label>
               </Col>
               <Col md="4">
-                  <label style={{color:"yellow"}}>{projectEntity.budget}</label>
+                  <label style={{color:"cyan"}}>{projectEntity.budget}</label>
               </Col>
           </Row>
           <Row style={{paddingTop:"20px"}}>
@@ -99,7 +111,7 @@ export const ProjectView = () => {
                   <label>Country : </label>
               </Col>
               <Col md="8">
-                  <label style={{color:"yellow"}}>{projectEntity.country}</label>
+                  <label style={{color:"darkslategray"}}>{projectEntity.country}</label>
               </Col>
           </Row>
           <Row style={{paddingTop:"20px"}}>
@@ -107,7 +119,7 @@ export const ProjectView = () => {
                   <label>Postcode : </label>
               </Col>
               <Col md="8">
-                  <label style={{color:"yellow"}}>{projectEntity.postcode}</label>
+                  <label style={{color:"darkseagreen"}}>{projectEntity.postcode}</label>
               </Col>
           </Row>
           <Row style={{paddingTop:"20px"}}>
@@ -115,7 +127,7 @@ export const ProjectView = () => {
                   <label>Expected No Of Hours : </label>
               </Col>
               <Col md="8">
-                  <label style={{color:"yellow"}}>{projectEntity.expectedNoOfHours}</label>
+                  <label style={{color:"blanchedalmond"}}>{projectEntity.expectedNoOfHours}</label>
               </Col>
           </Row>
           <Row style={{paddingTop:"20px"}}>
@@ -123,7 +135,7 @@ export const ProjectView = () => {
                   <label>Cut Off Time For Bidding : </label>
               </Col>
               <Col md="8">
-                  <label style={{color:"yellow"}}>{moment(projectEntity.dueDateTime).format("DD/MM/YYYY HH:mm:ss")}</label>
+                  <label style={{color:"greenyellow"}}>{moment(projectEntity.dueDateTime).format("DD/MM/YYYY HH:mm:ss")}</label>
               </Col>
           </Row>
           <Row style={{paddingTop:"20px"}}>

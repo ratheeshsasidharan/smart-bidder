@@ -16,7 +16,7 @@ export const getSortState = (
   location: { search: string },
   itemsPerPage: number,
   sortField = 'id',
-  sortOrder = 'asc'
+  sortOrder = 'desc'
 ): PaginationUtil => {
   const pageParam = getUrlParameter('page', location.search);
   const sortParam = getUrlParameter('sort', location.search);

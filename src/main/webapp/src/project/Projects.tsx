@@ -1,5 +1,5 @@
 import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
-import project, {getProjects, reset, selectProject} from "./Projects.reducer";
+import project, {getProjects, reset, selectProject, setSearchType} from "./Projects.reducer";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {
@@ -9,44 +9,64 @@ import {
     ITEMS_PER_PAGE,
     overridePaginationStateWithQueryParams
 } from "../shared/PaginationUtil";
-import {useAppSelector} from "../config/store";
-import {Button, Table} from "reactstrap";
+import {useAppDispatch, useAppSelector} from "../config/store";
+import {Button, Col, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Row, Table} from "reactstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import InfiniteScroll from "react-infinite-scroll-component";
 import {IProject} from "../model/Project.model";
 import {setProjectIdForBidList} from "../project-bid/ProjectBid.reducer";
 
 export const Projects = () => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const location = useLocation();
     const navigate = useNavigate();
 
     const [paginationState, setPaginationState] = useState(
-        overridePaginationStateWithQueryParams(getSortState(location, ITEMS_PER_PAGE, 'id'), location.search)
+        overridePaginationStateWithQueryParams(getSortState(location, ITEMS_PER_PAGE, 'id','desc'), location.search)
     );
     const [sorting, setSorting] = useState(false);
 
 
     const projectList = useAppSelector(state => state.project.entities);
+    const searchType = useAppSelector(state => state.project.searchType);
     const loading = useAppSelector(state => state.project.loading);
-    const totalItems = useAppSelector(state => state.project.totalItems);
     const links = useAppSelector(state => state.project.links);
-    const entity = useAppSelector(state => state.project.entity);
-    const updateSuccess = useAppSelector(state => state.project.updateSuccess);
 
+
+    const searchTypes =[
+        {value:"ALL",text:"All Projects"},
+        {value:"MY_PROJECTS",text:"My Projects"},
+        {value:"MY_BIDS",text:"My Bids"}
+    ];
+
+    const getSearchTypeText = (searchTypeKey) => {
+        return searchTypes.filter(e => e.value === searchTypeKey)[0].text;
+    }
+
+
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+
+    const toggle = () => setDropdownOpen((prevState) => !prevState);
+
+    const selectSearchType = (searchTypeIn)=> {
+        dispatch(setSearchType(searchTypeIn));
+    }
     const getAllProjects = () => {
-        dispatch<any>(
+        dispatch(
             getProjects({
                 page: paginationState.activePage - 1,
                 size: paginationState.itemsPerPage,
                 sort: `${paginationState.sort},${paginationState.order}`,
+                searchType
             })
         );
     };
 
+
+
     useEffect(() => {
         getAllProjects();
-    }, [paginationState.activePage]);
+    }, [paginationState.activePage,searchType]);
 
     const resetAll = () => {
         dispatch(reset());
@@ -54,7 +74,7 @@ export const Projects = () => {
             ...paginationState,
             activePage: 1,
         });
-        dispatch<any>(getProjects({}));
+        dispatch<any>(getProjects({page:0,size:ITEMS_PER_PAGE,sort:"id,desc",searchType:"ALL"}));
     };
 
     const refreshList = () => {
@@ -86,17 +106,34 @@ export const Projects = () => {
         dispatch(setProjectIdForBidList(project.id));
     }
 
+
     return (
         <div>
+            <Row>
+                <Col md="2">
             <h4 id="project-heading" data-cy="ProjectHeading">
                 Projects
+            </h4>
+                </Col>
+                <Col md="2" className="d-flex justify-content-start">
+                    <Dropdown isOpen={dropdownOpen} toggle={toggle}>
+                        <DropdownToggle caret>{getSearchTypeText(searchType)}</DropdownToggle>
+                        <DropdownMenu>
+                            {searchTypes.map(e=>
+                                    <DropdownItem id={e.value} key={e.value} onClick={()=>selectSearchType(e.value)}>{e.text}</DropdownItem>
+                              )}
+                          </DropdownMenu>
+                    </Dropdown>
+                </Col>
+                <Col md="8">
                 <div className="d-flex justify-content-end">
                     <Button className="me-2" color="info" onClick={refreshList} disabled={loading}>
                         <FontAwesomeIcon icon="sync" spin={loading} />{' '}
                         Refresh
                     </Button>
                 </div>
-            </h4>
+                </Col>
+            </Row>
             <div className="table-responsive">
                 <InfiniteScroll
                     dataLength={projectList ? projectList.length : 0}

@@ -2,31 +2,46 @@ import {useForm} from "react-hook-form";
 import {BidType} from "../model/enumerations/bid-type.model";
 import {useNavigate, useParams} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../config/store";
-import {createProjectBid} from "./ProjectBid.reducer";
+import {createProjectBid, resetAfterProjectBidCreate, updateProjectBid} from "./ProjectBid.reducer";
 import {useEffect} from "react";
 import {Button, Col, Row} from "reactstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {createProject, resetAfterProjectCreate, updateProject} from "../project/Projects.reducer";
+import {defaultValue, IProjectBid} from "../model/project-bid.model";
 
 export const ProjectBidCreate = () => {
 
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
     const bidTypeValues = Object.keys(BidType);
     const navigate = useNavigate();
-    const { projectId } = useParams<'projectId'>();
-    const projectBidEntity = useAppSelector(state => state.projectBid.entity);
+    let { projectId } = useParams<'projectId'>();
+    const { projectBidId } = useParams<'projectBidId'>();
+    let projectBidEntity:IProjectBid = useAppSelector(state => state.projectBid.entity);
+    const isNewProjectBid = projectBidId === undefined;
+    if(isNewProjectBid){
+        projectBidEntity = defaultValue;
+    }
+    else{
+        projectId=''+projectBidEntity.projectId;
+    }
     const updateSuccess = useAppSelector(state => state.projectBid.updateSuccess);
     const dispatch = useAppDispatch();
-    console.log(projectId);
     const onSubmit = data => {
-        console.log(projectId);
         const projectBidDataNew = {
+            ...projectBidEntity,
             ...data,
             projectId
         };
-        dispatch(createProjectBid(projectBidDataNew));
+        if(isNewProjectBid) {
+            dispatch(createProjectBid(projectBidDataNew));
+        }
+        else{
+            dispatch(updateProjectBid(projectBidDataNew));
+        }
     }
 
     const handleClose = () => {
+        dispatch(resetAfterProjectBidCreate());
         navigate('/projects/home');
     };
 
@@ -41,9 +56,9 @@ export const ProjectBidCreate = () => {
         <div>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Row className="justify-content-center">
-                    <Col md="12">
+                    <Col md="8">
                         <h2 id="createNewProject">
-                            Create a new bid
+                            {isNewProjectBid?"Create a new bid":"Modify Bid"}
                         </h2>
                     </Col>
                 </Row>
@@ -53,6 +68,7 @@ export const ProjectBidCreate = () => {
                         <select
                             {...register("bidType")}
                             className="form-control" id="bidTypeSelect"
+                            defaultValue={projectBidEntity.bidType}
                         >
                             {bidTypeValues.map(bidType => (
                                 <option value={bidType} key={bidType}>
@@ -63,7 +79,7 @@ export const ProjectBidCreate = () => {
                     </Col>
                     <Col md="4" class="form-group">
                         <label htmlFor="bidAmount">Amount</label>
-                        <input className="form-control" defaultValue="" {...register("bidAmount")} />
+                        <input className="form-control" defaultValue={projectBidEntity.bidAmount} {...register("bidAmount")} />
                     </Col>
                 </Row>
 
@@ -71,7 +87,7 @@ export const ProjectBidCreate = () => {
                 <Row className="justify-content-center">
                     <Col md="8" class="form-group">
                         <label htmlFor="comments">Comments</label>
-                        <input type="text" className="form-control" defaultValue="" {...register("comments")} />
+                        <input type="text" className="form-control" defaultValue={projectBidEntity.comments} {...register("comments")} />
                     </Col>
                 </Row>
                 <Row className="justify-content-center" style={{paddingTop:"20px"}}>

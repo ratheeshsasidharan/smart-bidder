@@ -38,7 +38,8 @@ public class HeaderUtil {
     }
 
     public static HttpHeaders createEntityUpdateAlert(String entityName, String param) {
-        return createEntityCreationAlert("smart-bidding",entityName,param);
+        String message = entityName+" with identifier "+ param + " is updated";
+        return createAlert("smart-bidding", message, param);
     }
 
     public static HttpHeaders createEntityUpdateAlert(String applicationName, String entityName, String param) {

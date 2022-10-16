@@ -2,6 +2,7 @@ package com.smartbidder.rest;
 
 import com.smartbidder.domain.ProjectBidDTO;
 import com.smartbidder.domain.ProjectDTO;
+import com.smartbidder.domain.ProjectSearchType;
 import com.smartbidder.exception.BadRequestAlertException;
 import com.smartbidder.service.ProjectBidService;
 import com.smartbidder.service.ProjectService;
@@ -10,8 +11,7 @@ import com.smartbidder.util.PaginationUtil;
 import com.smartbidder.util.ResponseUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -47,25 +47,22 @@ public class ProjectResource {
             throw new BadRequestAlertException("A new project cannot already have an ID", ENTITY_NAME, "idexists");
         }
         return projectService
-            .save(projectDTO)
-            .map(result -> {
-                try {
-                    return ResponseEntity
-                            .created(new URI("/api/projects/" + result.getId()))
-                            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-                            .body(result);
-                } catch (URISyntaxException e) {
-                    throw new RuntimeException(e);
-                }
-            });
+                .save(projectDTO)
+                .map(result -> {
+                    try {
+                        return ResponseEntity
+                                .created(new URI("/api/projects/" + result.getId()))
+                                .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+                                .body(result);
+                    } catch (URISyntaxException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
     }
 
 
     @PutMapping("/{id}")
-    public Mono<ResponseEntity<ProjectDTO>> updateProject(
-            @PathVariable(value = "id", required = false) final Long id,
-            @Valid @RequestBody ProjectDTO projectDTO
-    ) throws URISyntaxException {
+    public Mono<ResponseEntity<ProjectDTO>> updateProject(@PathVariable(value = "id", required = false) final Long id,@Valid @RequestBody ProjectDTO projectDTO) throws URISyntaxException {
         log.debug("REST request to update Project : {}, {}", id, projectDTO);
         if (projectDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -73,43 +70,42 @@ public class ProjectResource {
         if (!Objects.equals(id, projectDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
-
         return projectService
-                .existsById(id)
-                .flatMap(exists -> {
-                    if (!exists) {
-                        return Mono.error(new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
-                    }
-                    return projectService
-                            .update(projectDTO)
-                            .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
-                            .map(result ->
-                                    ResponseEntity
-                                            .ok()
-                                            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, result.getId().toString()))
-                                            .body(result)
-                            );
-                });
+            .existsById(id)
+            .flatMap(exists -> {
+                if (!exists) {
+                    return Mono.error(new BadRequestAlertException("Project not found", ENTITY_NAME, "idnotfound"));
+                }
+                return projectService
+                        .update(projectDTO)
+                        .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
+                        .map(result ->
+                            ResponseEntity
+                                    .ok()
+                                    .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, result.getId().toString()))
+                                    .body(result)
+                        );
+            });
     }
 
 
     @GetMapping("")
-    public Mono<ResponseEntity<List<ProjectDTO>>> getAllProjects(@org.springdoc.api.annotations.ParameterObject Pageable pageable,ServerHttpRequest request) {
+    public Mono<ResponseEntity<List<ProjectDTO>>> getAllProjects(@org.springdoc.api.annotations.ParameterObject Pageable pageable, ServerHttpRequest request, @RequestParam(required = false) ProjectSearchType searchType) {
         log.debug("REST request to get a page of Projects");
         return projectService
-            .countAll()
-            .zipWith(projectService.findAll(pageable).collectList())
-            .map(countWithEntities ->
-                    ResponseEntity
-                            .ok()
-                            .headers(
-                                    PaginationUtil.generatePaginationHttpHeaders(
-                                            UriComponentsBuilder.fromHttpRequest(request),
-                                            new PageImpl<>(countWithEntities.getT2(), pageable, countWithEntities.getT1())
-                                    )
-                            )
-                            .body(countWithEntities.getT2())
-            );
+                .countAll()
+                .zipWith(projectService.findAll(pageable,searchType).collectList())
+                .map(countWithEntities ->
+                        ResponseEntity
+                                .ok()
+                                .headers(
+                                        PaginationUtil.generatePaginationHttpHeaders(
+                                                UriComponentsBuilder.fromHttpRequest(request),
+                                                new PageImpl<>(countWithEntities.getT2(), pageable, countWithEntities.getT1())
+                                        )
+                                )
+                                .body(countWithEntities.getT2())
+                );
     }
 
 
@@ -121,9 +117,9 @@ public class ProjectResource {
     }
 
     @GetMapping("/{id}/project-bids")
-    public ResponseEntity<Flux<ProjectBidDTO>> getProjectBids(@PathVariable Long id,@org.springdoc.api.annotations.ParameterObject Pageable pageable,ServerHttpRequest request) {
+    public ResponseEntity<Flux<ProjectBidDTO>> getProjectBids(@PathVariable Long id, @org.springdoc.api.annotations.ParameterObject Pageable pageable, ServerHttpRequest request) {
         log.debug("REST request to get Project bids : {}", id);
-        Flux<ProjectBidDTO> projectBidDTOFlux = projectBidService.findByProjectId(pageable,id);
+        Flux<ProjectBidDTO> projectBidDTOFlux = projectBidService.findByProjectId(pageable, id);
         return ResponseEntity.ok().body(projectBidDTOFlux);
     }
 
@@ -137,7 +133,7 @@ public class ProjectResource {
                         Mono.just(
                                 ResponseEntity
                                         .noContent()
-                                        .headers(HeaderUtil.createEntityDeletionAlert( ENTITY_NAME, id.toString()))
+                                        .headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString()))
                                         .build()
                         )
                 );

@@ -3,6 +3,7 @@ package com.smartbidder.service;
 
 import com.smartbidder.domain.Project;
 import com.smartbidder.domain.ProjectDTO;
+import com.smartbidder.domain.ProjectSearchType;
 import com.smartbidder.domain.ProjectStatus;
 import com.smartbidder.repository.ProjectRepository;
 import com.smartbidder.security.SecurityUtils;
@@ -78,9 +79,21 @@ public class ProjectService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Flux<ProjectDTO> findAll(Pageable pageable) {
+    public Flux<ProjectDTO> findAll(Pageable pageable, ProjectSearchType searchType) {
         log.debug("Request to get all Projects");
-        return projectRepository.findAllBy(pageable).flatMap(this::getEnrichedProject);
+        if(ProjectSearchType.MY_PROJECTS == searchType){
+            return Flux.from(SecurityUtils.getCurrentUserLogin())
+                    .flatMap(login -> projectRepository.findAllByCreatedBy(login,pageable))
+                    .flatMap(this::getEnrichedProject);
+        }
+        else if(ProjectSearchType.MY_BIDS == searchType){
+            return Flux.from(SecurityUtils.getCurrentUserLogin())
+                    .flatMap(login -> projectRepository.findAllByBiddedBy(login,pageable))
+                    .flatMap(this::getEnrichedProject);
+        }
+        else{
+            return projectRepository.findAllBy(pageable).flatMap(this::getEnrichedProject);
+        }
     }
 
     private Mono<ProjectDTO> getEnrichedProject(Project project){

@@ -29,3 +29,10 @@ Tom James, user1
 Vinod Kumar, user2
 Jack Philip, user3
 Rob Thomas, user4
+
+
+
+//TO DO Later
+
+1. Caching of user data for quick fetch from APIs
+2. Styling improvements

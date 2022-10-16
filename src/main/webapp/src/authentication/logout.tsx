@@ -8,6 +8,7 @@ export const Logout = () => {
 
     useLayoutEffect(() => {
         dispatch(logout());
+        window.location.href = "app"
     });
 
     return (

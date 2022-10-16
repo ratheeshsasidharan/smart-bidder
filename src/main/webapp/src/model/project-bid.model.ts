@@ -7,9 +7,10 @@ export interface IProjectBid {
   bidType?: BidType;
   bidAmount?: number;
   comments?: string | null;
-  bidStatus?: BidStatus | null;
+    bidStatus?: BidStatus | null;
   projectId?: number | null;
   createdBy?: string | null;
+  createdByFullName?: string | null;
 }
 
 export interface ProjectBidState {

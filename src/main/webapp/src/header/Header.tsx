@@ -19,7 +19,7 @@ const Header = () => {
               Smart Projects
             </span>
                 {isAuthenticated &&
-                    <Nav id="header-tabs" className="ms-auto justify-content-evenly flex-grow-1" navbar>
+                    <Nav id="header-tabs" className="ms-auto justify-content-lg-evenly flex-grow-1" navbar>
                         <NavItem>
                             <NavLink tag={Link} to="/projects/new" className="d-flex align-items-center">
                                 <FontAwesomeIcon icon="plus"/>
@@ -33,14 +33,6 @@ const Header = () => {
                                 <span>&nbsp;Browse Projects</span>
                             </NavLink>
                         </NavItem>
-
-                        <NavItem>
-                            <NavLink tag={Link} to="/" className="d-flex align-items-center">
-                                <FontAwesomeIcon icon="suitcase"/>
-                                <span>&nbsp;My Projects</span>
-                            </NavLink>
-                        </NavItem>
-
                         <NavItem>
                             <NavLink tag={Link} to="/logout" className="d-flex align-items-center">
                                 <FontAwesomeIcon icon="sign-in-alt"/>

@@ -16,15 +16,4 @@ public interface ProjectBidRepository extends ReactiveCrudRepository<ProjectBid,
     @Query("SELECT * FROM project_bid entity WHERE entity.project_id = :id")
     Flux<ProjectBid> findByProject(Long id,Pageable pageable);
 
-    @Override
-    <S extends ProjectBid> Mono<S> save(S entity);
-
-    @Override
-    Flux<ProjectBid> findAll();
-
-    @Override
-    Mono<ProjectBid> findById(Long id);
-
-    @Override
-    Mono<Void> deleteById(Long id);
 }

@@ -1,18 +1,16 @@
 import {useEffect, useState} from "react";
-import {
-    ASC,
-    DESC,
-    getSortState,
-    ITEMS_PER_PAGE,
-    overridePaginationStateWithQueryParams
-} from "../shared/PaginationUtil";
-import {useAppSelector} from "../config/store";
-import projectBid, {getProjectBids} from "./ProjectBid.reducer";
+import {getSortState, ITEMS_PER_PAGE, overridePaginationStateWithQueryParams} from "../shared/PaginationUtil";
+import {useAppDispatch, useAppSelector} from "../config/store";
+import {getProjectBids, selectProjectBid, updateProjectBid} from "./ProjectBid.reducer";
 import {useDispatch} from "react-redux";
-import {Button, Card, Col, Row, Table} from "reactstrap";
-import {Link, useLocation} from "react-router-dom";
+import {Button, Card, Col, Row} from "reactstrap";
+import {useLocation, useNavigate} from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
 import {IProjectBid} from "../model/project-bid.model";
+import {BidStatus} from "../model/enumerations/bid-status.model";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {selectProject, updateProject} from "../project/Projects.reducer";
+import {ProjectStatus} from "../model/enumerations/project-status.model";
 
 export const ProjectBids = () => {
 
@@ -29,8 +27,9 @@ export const ProjectBids = () => {
     const entity = useAppSelector(state => state.projectBid.entity);
     const updateSuccess = useAppSelector(state => state.projectBid.updateSuccess);
     const projectId = useAppSelector(state => state.projectBid.projectId);
-
-    const dispatch = useDispatch();
+    const loggedInUser = useAppSelector(state => state.authentication.account).login;
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
 
     const getAllProjectBids = () => {
         dispatch<any>(
@@ -58,6 +57,14 @@ export const ProjectBids = () => {
         }
     };
 
+    const goToProjectBidEdit = (projectBid:IProjectBid) => {
+        dispatch(selectProjectBid(projectBid));
+        navigate(`/project-bids/${projectBid.id}/edit`);
+    };
+
+    const cancelProjectBid = (projectBid:IProjectBid) => {
+        dispatch(updateProjectBid({...projectBid,bidStatus:BidStatus.CANCELLED}));
+    };
 
     return (
         <div>
@@ -76,8 +83,29 @@ export const ProjectBids = () => {
                             {projectBidsList.map((projectBid:IProjectBid, i) => (
                                 <Card>
                                     <Row style={{paddingTop:"10px"}}>
-                                        <Col md="12">
-                                            <label>{projectBid.createdBy} placed a bid of {projectBid.bidAmount} {projectBid.bidType} ({projectBid.bidStatus})</label>
+                                        <Col md="8">
+                                            <label>{projectBid.createdByFullName} placed a bid of {projectBid.bidAmount} {projectBid.bidType} ({projectBid.bidStatus})</label>
+                                        </Col>
+                                        <Col md="4">
+                                            {projectBid.bidStatus===BidStatus.OPEN && projectBid.createdBy===loggedInUser &&
+                                                <>
+                                                    <Button to={`/project-bids/${projectBid.id}/edit`} replace color="primary"
+                                                            onClick={() => goToProjectBidEdit(projectBid)}>
+                                                        <FontAwesomeIcon icon="pencil-alt"/>{' '}
+                                                        <span className="d-none d-md-inline">
+                                                            Edit
+                                                        </span>
+                                                    </Button>
+                                                    <Button to={`/project-bids/${projectBid.id}/cancel`} replace color="primary" style={{marginLeft:"10px"}}
+                                                            onClick={() => cancelProjectBid(projectBid)}>
+                                                        <FontAwesomeIcon icon="pencil-alt"/>{' '}
+                                                        <span className="d-none d-md-inline">
+                                                          Cancel
+                                                        </span>
+                                                    </Button>
+                                                </>
+
+                                            }
                                         </Col>
                                     </Row>
                                     <Row style={{paddingTop:"10px"}}>
