@@ -1,0 +1,104 @@
+// Override Boostrap variables
+@import '~bootswatch/dist/darkly/variables';
+// Import Bootstrap source files from node_modules
+@import '~bootstrap/scss/bootstrap';
+@import '~bootswatch/dist/darkly/bootswatch';
+body {
+  margin: 0;
+}
+
+a {
+  color: #533f03;
+  font-weight: bold;
+}
+
+* {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  &:after,
+  &::before {
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+}
+.App {
+  box-sizing: border-box;
+
+  .view-container {
+    width: 100%;
+    height: calc(100% - 40px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 3rem 1rem 1rem;
+    .card {
+      padding: 1rem;
+    }
+
+    .view-routes {
+      height: 100%;
+
+      > div {
+        height: 100%;
+      }
+    }
+  }
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #b9907e;
+}
+
+///////////////////////////////////////////
+//Default
+.labelHeading{
+  color: #cca08f;
+}
+
+
+//labelStyle1
+.labelStyle1{
+  color: #e1d1c4;
+}
+
+//labelStyle2
+.labelStyle2{
+  //color: #c5bbba;
+}
+
+///////////////////////////////////////////
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.selectedRow {
+  background-color: #776963;
+}
+
+
