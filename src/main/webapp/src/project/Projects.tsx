@@ -1,5 +1,5 @@
 import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
-import project, {getProjects, reset, selectProject, setSearchType} from "./Projects.reducer";
+import project, {getProjects, reset, selectProject, setSearchType, setSelectedRowId} from "./Projects.reducer";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {
@@ -10,7 +10,7 @@ import {
     overridePaginationStateWithQueryParams
 } from "../shared/PaginationUtil";
 import {useAppDispatch, useAppSelector} from "../config/store";
-import {Button, Col, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Row, Table} from "reactstrap";
+import {Badge, Button, Col, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Row, Table} from "reactstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import InfiniteScroll from "react-infinite-scroll-component";
 import {IProject} from "../model/Project.model";
@@ -31,7 +31,7 @@ export const Projects = () => {
     const searchType = useAppSelector(state => state.project.searchType);
     const loading = useAppSelector(state => state.project.loading);
     const links = useAppSelector(state => state.project.links);
-
+    const selectedRowId = useAppSelector(state => state.project.selectedRowId);
 
     const searchTypes =[
         {value:"ALL",text:"All Projects"},
@@ -101,11 +101,17 @@ export const Projects = () => {
         setSorting(true);
     };
 
-    const viewProject = (project:IProject) =>{
+    const onRowClickProject = (project:IProject,rowId) =>{
+        dispatch(setSelectedRowId(rowId));
         dispatch(selectProject(project));
         dispatch(setProjectIdForBidList(project.id));
     }
 
+    const projStatColorMap = {};
+    projStatColorMap['OPEN'] = 'primary';
+    projStatColorMap['ACCEPTED'] = 'success';
+    projStatColorMap['DECLINED'] = 'warning';
+    projStatColorMap['CANCELLED'] = 'warning';
 
     return (
         <div>
@@ -165,12 +171,14 @@ export const Projects = () => {
                             </thead>
                             <tbody>
                             {projectList.map((project:IProject, i) => (
-                                <tr key={`entity-${i}`} data-cy="entityTable" onClick={()=>viewProject(project)}>
+                                <tr key={`entity-${i}`} data-cy="entityTable" onClick={(e)=>onRowClickProject(project,i)} className={i===selectedRowId?"selectedRow":""}>
                                     <td>
                                         {project.category}
                                     </td>
                                     <td>{project.summary}</td>
-                                    <td>{project.status}</td>
+                                    <td>
+                                        <Badge color={projStatColorMap[project.status] as string}>{project.status}</Badge>
+                                    </td>
                                     <td>{project.createdByFullName}</td>
                                     <td>{project.postcode}</td>
                                 </tr>

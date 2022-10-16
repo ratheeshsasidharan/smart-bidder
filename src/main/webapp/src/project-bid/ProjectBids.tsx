@@ -3,7 +3,7 @@ import {getSortState, ITEMS_PER_PAGE, overridePaginationStateWithQueryParams} fr
 import {useAppDispatch, useAppSelector} from "../config/store";
 import {getProjectBids, selectProjectBid, updateProjectBid} from "./ProjectBid.reducer";
 import {useDispatch} from "react-redux";
-import {Button, Card, Col, Row} from "reactstrap";
+import {Badge, Button, Card, Col, Row} from "reactstrap";
 import {useLocation, useNavigate} from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
 import {IProjectBid} from "../model/project-bid.model";
@@ -66,6 +66,17 @@ export const ProjectBids = () => {
         dispatch(updateProjectBid({...projectBid,bidStatus:BidStatus.CANCELLED}));
     };
 
+    const getBidStatBadgeColor = (bidStatus:string) => {
+        return "info";
+    }
+
+    const bidStatColorMap = {};
+    bidStatColorMap['OPEN'] = 'primary';
+    bidStatColorMap['ASSIGNED'] = 'success';
+    bidStatColorMap['CANCELLED'] = 'warning';
+    bidStatColorMap['COMPLETED'] = 'success';
+
+
     return (
         <div>
             <h4 id="project-heading" data-cy="ProjectHeading">
@@ -84,7 +95,8 @@ export const ProjectBids = () => {
                                 <Card>
                                     <Row style={{paddingTop:"10px"}}>
                                         <Col md="8">
-                                            <label>{projectBid.createdByFullName} placed a bid of {projectBid.bidAmount} {projectBid.bidType} ({projectBid.bidStatus})</label>
+                                            <label>{projectBid.createdByFullName} placed a bid of {projectBid.bidAmount} {projectBid.bidType}&nbsp;&nbsp;</label>
+                                            <Badge color={bidStatColorMap[projectBid.bidStatus] as string}>{projectBid.bidStatus}</Badge>
                                         </Col>
                                         <Col md="4">
                                             {projectBid.bidStatus===BidStatus.OPEN && projectBid.createdBy===loggedInUser &&
@@ -98,7 +110,7 @@ export const ProjectBids = () => {
                                                     </Button>
                                                     <Button to={`/project-bids/${projectBid.id}/cancel`} replace color="primary" style={{marginLeft:"10px"}}
                                                             onClick={() => cancelProjectBid(projectBid)}>
-                                                        <FontAwesomeIcon icon="pencil-alt"/>{' '}
+                                                        <FontAwesomeIcon icon="trash" />{' '}
                                                         <span className="d-none d-md-inline">
                                                           Cancel
                                                         </span>

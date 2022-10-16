@@ -48,7 +48,7 @@ export const ProjectView = () => {
                       </Button>
                       <Button to={`/projects/${projectEntity.id}/cancel`} replace color="primary" style={{marginLeft:"10px"}}
                               onClick={() => cancelProject(projectEntity.id)}>
-                          <FontAwesomeIcon icon="pencil-alt"/>{' '}
+                          <FontAwesomeIcon icon="trash" />{' '}
                           <span className="d-none d-md-inline">
                           Cancel
                           </span>

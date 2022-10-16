@@ -13,7 +13,8 @@ const initialState: ProjectsState = {
     updating: false,
     totalItems: 0,
     updateSuccess: false,
-    searchType:"ALL"
+    searchType:"ALL",
+    selectedRowId:1000
 };
 
 let url = window.location.protocol + '//' + window.location.host;
@@ -59,6 +60,10 @@ export const ProjectSlice = createSlice({
         setSearchType(state,action) {
             state.searchType=action.payload;
             return state;
+        },
+        setSelectedRowId(state,action){
+            state.selectedRowId=action.payload;
+            return state;
         }
     },
     name: 'project',
@@ -90,6 +95,6 @@ export const ProjectSlice = createSlice({
     }
 });
 
-export const { reset,selectProject,resetAfterProjectCreate,setSearchType } = ProjectSlice.actions;
+export const { reset,selectProject,resetAfterProjectCreate,setSearchType,setSelectedRowId } = ProjectSlice.actions;
 
 export default ProjectSlice.reducer;

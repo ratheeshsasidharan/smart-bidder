@@ -28,6 +28,7 @@ export interface ProjectsState {
   totalItems?: number;
   updateSuccess: boolean;
   searchType?:string;
+  selectedRowId:number;
 }
 
 export type IQueryParams = { query?: string; page?: number; size?: number; sort?: string;searchType?:string };
