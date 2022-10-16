@@ -36,3 +36,4 @@ Rob Thomas, user4
 
 1. Caching of user data for quick fetch from APIs
 2. Styling improvements
+3. Some validations done in frontend like user based access control to resource to be done in APIs also.

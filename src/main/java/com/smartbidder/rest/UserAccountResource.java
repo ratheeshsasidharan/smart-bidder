@@ -1,13 +1,11 @@
 package com.smartbidder.rest;
 
-import com.smartbidder.domain.UserDTO;
 import com.smartbidder.domain.UserDetailsDTO;
 import com.smartbidder.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ServerWebExchange;
@@ -19,7 +17,7 @@ import java.security.Principal;
 @RequestMapping("/api")
 @Slf4j
 @AllArgsConstructor
-public class AccountResource {
+public class UserAccountResource {
 
     private final UserService userService;
 

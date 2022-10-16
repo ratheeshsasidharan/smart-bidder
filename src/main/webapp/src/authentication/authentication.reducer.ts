@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {AppThunk} from "../config/store";
+import {serializeAxiosError} from "../reducers/reducer.utils";
 
 const AUTH_TOKEN_KEY = 'authenticationToken';
 let url = window.location.protocol + '//' + window.location.host;
@@ -35,7 +36,9 @@ interface IAuthParams {
 
 export const authenticate = createAsyncThunk(
     'authentication/login',
-    async (auth: IAuthParams) => axios.post<any>('api/authenticate', auth)
+    async (auth: IAuthParams) => axios.post<any>('api/authenticate', auth),{
+        serializeError: serializeAxiosError
+    }
 );
 
 export const login: (username: string, password: string) => AppThunk =

@@ -1,7 +1,7 @@
 package com.smartbidder.service;
 
-import com.smartbidder.domain.UserDetails;
 import com.smartbidder.domain.UserDTO;
+import com.smartbidder.domain.UserDetails;
 import com.smartbidder.repository.UserRepository;
 import com.smartbidder.security.SecurityUtils;
 import lombok.AllArgsConstructor;
@@ -38,8 +38,7 @@ public class UserService {
                     newUserDetails.setActivated(true);
                     return newUserDetails;
                 })
-                .flatMap(userRepository::save)
-                .doOnNext(userDetails1 -> log.debug("Created Information for User: {}", userDetails1));
+                .flatMap(userRepository::save);
     }
 
 
@@ -48,7 +47,7 @@ public class UserService {
         return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneByLogin);
     }
 
-    public Mono<UserDetails> findUserByLogin(String login){
+    public Mono<UserDetails> findUserByLogin(String login) {
         return userRepository.findOneByLogin(login);
     }
 }

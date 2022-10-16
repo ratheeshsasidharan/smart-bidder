@@ -14,7 +14,6 @@ public final class SecurityUtils {
 
     private SecurityUtils() {}
 
-
     public static Mono<String> getCurrentUserLogin() {
         return ReactiveSecurityContextHolder
             .getContext()
@@ -32,15 +31,6 @@ public final class SecurityUtils {
             return (String) authentication.getPrincipal();
         }
         return null;
-    }
-
-
-    public static Mono<String> getCurrentUserJWT() {
-        return ReactiveSecurityContextHolder
-            .getContext()
-            .map(SecurityContext::getAuthentication)
-            .filter(authentication -> authentication.getCredentials() instanceof String)
-            .map(authentication -> (String) authentication.getCredentials());
     }
 
 

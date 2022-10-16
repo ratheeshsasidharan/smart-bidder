@@ -62,10 +62,7 @@ public class SecurityConfiguration {
                 .pathMatchers("/api/account/reset-password/finish").permitAll()
                 .pathMatchers("/api/**").authenticated()
                 .pathMatchers("/services/**").authenticated()
-                .pathMatchers("/management/health").permitAll()
-                .pathMatchers("/management/health/**").permitAll()
-                .pathMatchers("/management/info").permitAll()
-                .pathMatchers("/management/prometheus").permitAll();
+                .pathMatchers("/actuator/**").permitAll();
         return http.build();
     }
 

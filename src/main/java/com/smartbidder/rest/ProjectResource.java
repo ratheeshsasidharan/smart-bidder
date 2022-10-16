@@ -43,7 +43,7 @@ public class ProjectResource {
     public Mono<ResponseEntity<ProjectDTO>> createProject(@Valid @RequestBody ProjectDTO projectDTO) throws URISyntaxException {
         log.debug("REST request to save Project : {}", projectDTO);
         if (projectDTO.getId() != null) {
-            throw new BadRequestAlertException("A new project cannot already have an ID", ENTITY_NAME, "idexists");
+            return Mono.error(new BadRequestAlertException("A new project cannot already have an ID", ENTITY_NAME, "idexists"));
         }
         return projectService
                 .save(projectDTO)
@@ -63,11 +63,8 @@ public class ProjectResource {
     @PutMapping("/{id}")
     public Mono<ResponseEntity<ProjectDTO>> updateProject(@PathVariable(value = "id", required = false) final Long id, @Valid @RequestBody ProjectDTO projectDTO) throws URISyntaxException {
         log.debug("REST request to update Project : {}, {}", id, projectDTO);
-        if (projectDTO.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
-        if (!Objects.equals(id, projectDTO.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+        if (projectDTO.getId() == null || !Objects.equals(id, projectDTO.getId())) {
+            return Mono.error(new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull"));
         }
         return projectService
                 .existsById(id)

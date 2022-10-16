@@ -71,7 +71,7 @@ export const ProjectView = () => {
                   <label>Posted By : </label>
               </Col>
               <Col md="8">
-                  <label style={{color:'lightseagreen'}}>{projectEntity.createdByFullName}({moment(projectEntity.createdDate).format("DD/MM/YYYY HH:mm")})</label>
+                  <label className="labelStyle2">{projectEntity.createdByFullName}({moment(projectEntity.createdDate).format("DD/MM/YYYY HH:mm")})</label>
               </Col>
           </Row>
           <Row style={{paddingTop:"20px"}}>
@@ -79,7 +79,7 @@ export const ProjectView = () => {
                   <label>Category : </label>
               </Col>
               <Col md="4">
-                  <label style={{color:'#66AA99'}}>{projectEntity.category}</label>
+                  <label className="labelStyle2">{projectEntity.category}</label>
               </Col>
           </Row>
           <Row style={{paddingTop:"20px"}}>
@@ -87,7 +87,7 @@ export const ProjectView = () => {
                   <label>Summary : </label>
               </Col>
               <Col md="8">
-                  <label style={{color:'#779988'}}>{projectEntity.summary}</label>
+                  <label className="labelStyle2">{projectEntity.summary}</label>
               </Col>
           </Row>
           <Row style={{paddingTop:"20px"}}>
@@ -95,7 +95,7 @@ export const ProjectView = () => {
                   <label>Status : </label>
               </Col>
               <Col md="8">
-                  <label style={{color:"darkcyan"}}>{projectEntity.status}</label>
+                  <label className="labelStyle2">{projectEntity.status}</label>
               </Col>
           </Row>
           <Row style={{paddingTop:"20px"}}>
@@ -103,7 +103,7 @@ export const ProjectView = () => {
                   <label>Budget : </label>
               </Col>
               <Col md="4">
-                  <label style={{color:"cyan"}}>{projectEntity.budget}</label>
+                  <label className="labelStyle2">{projectEntity.budget}</label>
               </Col>
           </Row>
           <Row style={{paddingTop:"20px"}}>
@@ -111,7 +111,7 @@ export const ProjectView = () => {
                   <label>Country : </label>
               </Col>
               <Col md="8">
-                  <label style={{color:"darkslategray"}}>{projectEntity.country}</label>
+                  <label className="labelStyle2">{projectEntity.country}</label>
               </Col>
           </Row>
           <Row style={{paddingTop:"20px"}}>
@@ -119,7 +119,7 @@ export const ProjectView = () => {
                   <label>Postcode : </label>
               </Col>
               <Col md="8">
-                  <label style={{color:"darkseagreen"}}>{projectEntity.postcode}</label>
+                  <label className="labelStyle2">{projectEntity.postcode}</label>
               </Col>
           </Row>
           <Row style={{paddingTop:"20px"}}>
@@ -127,7 +127,7 @@ export const ProjectView = () => {
                   <label>Expected No Of Hours : </label>
               </Col>
               <Col md="8">
-                  <label style={{color:"blanchedalmond"}}>{projectEntity.expectedNoOfHours}</label>
+                  <label className="labelStyle2">{projectEntity.expectedNoOfHours}</label>
               </Col>
           </Row>
           <Row style={{paddingTop:"20px"}}>
@@ -135,15 +135,15 @@ export const ProjectView = () => {
                   <label>Cut Off Time For Bidding : </label>
               </Col>
               <Col md="8">
-                  <label style={{color:"greenyellow"}}>{moment(projectEntity.dueDateTime).format("DD/MM/YYYY HH:mm:ss")}</label>
+                  <label className="labelStyle2">{moment(projectEntity.dueDateTime).format("DD/MM/YYYY HH:mm:ss")}</label>
               </Col>
           </Row>
           <Row style={{paddingTop:"20px"}}>
               <Col md="4">
-                  <label>Description : </label>
+                  <label >Description : </label>
               </Col>
               <Col md="8">
-                  <label style={{color:"yellow"}}>{projectEntity.description}</label>
+                  <label className="labelStyle2">{projectEntity.description}</label>
               </Col>
           </Row>
 
