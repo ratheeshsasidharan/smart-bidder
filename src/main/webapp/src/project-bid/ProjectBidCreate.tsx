@@ -79,7 +79,14 @@ export const ProjectBidCreate = () => {
                     </Col>
                     <Col md="4" class="form-group">
                         <label htmlFor="bidAmount">Amount</label>
-                        <input className="form-control" defaultValue={projectBidEntity.bidAmount} {...register("bidAmount")} />
+                        <input className="form-control" defaultValue={projectBidEntity.bidAmount} {...register("bidAmount",{
+                            required: "Required",
+                            pattern: {
+                                value: /[0-9]/,
+                                message: "Invalid Amount"
+                            }
+                        })} />
+                        {errors.bidAmount?.message && <p>{errors.bidAmount?.message}</p>}
                     </Col>
                 </Row>
 
@@ -87,7 +94,10 @@ export const ProjectBidCreate = () => {
                 <Row className="justify-content-center">
                     <Col md="8" class="form-group">
                         <label htmlFor="comments">Comments</label>
-                        <input type="text" className="form-control" defaultValue={projectBidEntity.comments} {...register("comments")} />
+                        <input type="text" className="form-control" defaultValue={projectBidEntity.comments} {...register("comments",{maxLength: 255 })} />
+                        {errors.comments && errors.comments.type === "maxLength" && (
+                            <span role="alert">Max length exceeded</span>
+                        )}
                     </Col>
                 </Row>
                 <Row className="justify-content-center" style={{paddingTop:"20px"}}>

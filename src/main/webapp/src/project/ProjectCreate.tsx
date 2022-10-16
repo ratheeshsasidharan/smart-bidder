@@ -63,7 +63,13 @@ export const ProjectCreate = () => {
                 <Row className="justify-content-center">
                     <Col md="8" class="form-group">
                         <label htmlFor="summary">Summary</label>
-                        <input className="form-control" defaultValue={projectEntity.summary} {...register("summary")} />
+                        <input className="form-control" defaultValue={projectEntity.summary} {...register("summary",{ required: true,maxLength: 255 })} />
+                        {errors.summary && errors.summary.type === "required" && (
+                            <span role="alert">This is required</span>
+                        )}
+                        {errors.summary && errors.summary.type === "maxLength" && (
+                            <span role="alert">Max length exceeded</span>
+                        )}
                     </Col>
                 </Row>
             <Row className="justify-content-center">
@@ -101,11 +107,25 @@ export const ProjectCreate = () => {
             <Row className="justify-content-center">
                 <Col md="4" class="form-group">
                     <label htmlFor="postcode">Postcode</label>
-                    <input className="form-control" defaultValue={projectEntity.postcode} {...register("postcode")} />
+                    <input className="form-control" defaultValue={projectEntity.postcode} {...register("postcode",{
+                        required: "Required",
+                        pattern: {
+                        value: /^[0-9]{4}$/,
+                        message: "Invalid post code"
+                    }
+                    })} />
+                    {errors.postcode?.message && <p>{errors.postcode?.message}</p>}
                 </Col>
                 <Col md="4" class="form-group">
                     <label htmlFor="expectedNoOfHours">Expected Time (Hours)</label>
-                    <input className="form-control" defaultValue={projectEntity.expectedNoOfHours} {...register("expectedNoOfHours")} />
+                    <input className="form-control" defaultValue={projectEntity.expectedNoOfHours} {...register("expectedNoOfHours",{
+                        required: "Required",
+                        pattern: {
+                            value: /[0-9]/,
+                            message: "Invalid Expected Time"
+                        }
+                    })} />
+                    {errors.expectedNoOfHours?.message && <p>{errors.expectedNoOfHours?.message}</p>}
                 </Col>
             </Row>
 
@@ -113,11 +133,21 @@ export const ProjectCreate = () => {
                 <Row className="justify-content-center">
                     <Col md="4" class="form-group">
                         <label htmlFor="dueDateTime">Cut Off Time For Bidding</label>
-                        <input className="form-control" type="datetime-local" defaultValue={moment(projectEntity.dueDateTime).format("yyyy-MM-DDThh:mm")} {...register("dueDateTime")} />
+                        <input className="form-control" type="datetime-local" defaultValue={moment(projectEntity.dueDateTime).format("yyyy-MM-DDThh:mm")} {...register("dueDateTime",{ required: true})} />
+                        {errors.dueDateTime && errors.dueDateTime.type === "required" && (
+                            <span role="alert">This is required</span>
+                        )}
                     </Col>
                     <Col md="4" class="form-group">
                         <label htmlFor="budget">Budget</label>
-                        <input className="form-control" defaultValue={projectEntity.budget} {...register("budget")} />
+                        <input className="form-control" defaultValue={projectEntity.budget} {...register("budget",{
+                            pattern: {
+                                value: /[0-9]/,
+                                message: "Invalid Budget"
+                            }
+                        })} />
+                        {errors.budget?.message && <p>{errors.budget?.message}</p>}
+
                     </Col>
                 </Row>
 
@@ -125,7 +155,10 @@ export const ProjectCreate = () => {
                 <Row className="justify-content-center">
                     <Col md="8" class="form-group">
                         <label htmlFor="description">Description</label>
-                        <input type="text" className="form-control" defaultValue={projectEntity.description} {...register("description")} />
+                        <input type="text" className="form-control" defaultValue={projectEntity.description} {...register("description",{maxLength: 255 })} />
+                        {errors.description && errors.description.type === "maxLength" && (
+                            <span role="alert">Max length exceeded</span>
+                        )}
                     </Col>
                 </Row>
                 <Row className="justify-content-center" style={{paddingTop:"20px"}}>

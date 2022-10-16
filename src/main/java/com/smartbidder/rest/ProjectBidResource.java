@@ -39,7 +39,7 @@ import java.util.Objects;
 @AllArgsConstructor
 public class ProjectBidResource {
 
-    private static final String ENTITY_NAME = "projectBid";
+    private static final String ENTITY_NAME = "Project Bid";
 
 
     private final ProjectBidService projectBidService;

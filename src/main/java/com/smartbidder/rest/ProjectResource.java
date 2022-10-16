@@ -11,7 +11,6 @@ import com.smartbidder.util.PaginationUtil;
 import com.smartbidder.util.ResponseUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -62,7 +61,7 @@ public class ProjectResource {
 
 
     @PutMapping("/{id}")
-    public Mono<ResponseEntity<ProjectDTO>> updateProject(@PathVariable(value = "id", required = false) final Long id,@Valid @RequestBody ProjectDTO projectDTO) throws URISyntaxException {
+    public Mono<ResponseEntity<ProjectDTO>> updateProject(@PathVariable(value = "id", required = false) final Long id, @Valid @RequestBody ProjectDTO projectDTO) throws URISyntaxException {
         log.debug("REST request to update Project : {}, {}", id, projectDTO);
         if (projectDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -71,21 +70,21 @@ public class ProjectResource {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
         return projectService
-            .existsById(id)
-            .flatMap(exists -> {
-                if (!exists) {
-                    return Mono.error(new BadRequestAlertException("Project not found", ENTITY_NAME, "idnotfound"));
-                }
-                return projectService
-                        .update(projectDTO)
-                        .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
-                        .map(result ->
-                            ResponseEntity
-                                    .ok()
-                                    .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, result.getId().toString()))
-                                    .body(result)
-                        );
-            });
+                .existsById(id)
+                .flatMap(exists -> {
+                    if (!exists) {
+                        return Mono.error(new BadRequestAlertException("Project not found", ENTITY_NAME, "idnotfound"));
+                    }
+                    return projectService
+                            .update(projectDTO)
+                            .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
+                            .map(result ->
+                                    ResponseEntity
+                                            .ok()
+                                            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, result.getId().toString()))
+                                            .body(result)
+                            );
+                });
     }
 
 
@@ -94,7 +93,7 @@ public class ProjectResource {
         log.debug("REST request to get a page of Projects");
         return projectService
                 .countAll()
-                .zipWith(projectService.findAll(pageable,searchType).collectList())
+                .zipWith(projectService.findAll(pageable, searchType).collectList())
                 .map(countWithEntities ->
                         ResponseEntity
                                 .ok()

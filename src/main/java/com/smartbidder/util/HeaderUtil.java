@@ -33,7 +33,7 @@ public class HeaderUtil {
     }
 
     public static HttpHeaders createEntityCreationAlert(String applicationName, String entityName, String param) {
-        String message = "A new " + entityName + " is created with identifier " + param;
+        String message = entityName + " created with identifier " + param;
         return createAlert(applicationName, message, param);
     }
 
@@ -43,7 +43,7 @@ public class HeaderUtil {
     }
 
     public static HttpHeaders createEntityUpdateAlert(String applicationName, String entityName, String param) {
-        String message = "A " + entityName + " is updated with identifier " + param;
+        String message = entityName+" with identifier "+ param + " is updated";
         return createAlert(applicationName, message, param);
     }
 
