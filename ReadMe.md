@@ -23,17 +23,13 @@ This is an open-ended fullstack exercise. At minimum your solution should includ
 Swagger URL - http://localhost:8081/swagger-doc/swagger-ui.html
 
 
-
-
-
-
-
-
 //TO DO Later
 
-1. Caching of user data for quick fetch from APIs
+1. Search functionality for projects
+2. Caching of user data for quick fetch from APIs
 2. Styling improvements
 3. Some validations done in frontend like user based access control to resource to be done in APIs also.
+4. Bring assigned to details in the project screen
 
 
 Tom James, user1
@@ -45,7 +41,7 @@ Rob Thomas, user4
 Project1
 
 user1
-Replace the roofing sheet
+Replace the house roofing sheet
 I have 3 x damage roof sheet that I need to replace with new one
 10hr, 900
 

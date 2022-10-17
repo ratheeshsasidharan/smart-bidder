@@ -24,8 +24,9 @@ export const ProjectCreate = () => {
     }
     const updateSuccess = useAppSelector(state => state.project.updateSuccess);
     const dispatch = useAppDispatch();
+
     const onSubmit = data => {
-        const dueDateTime = moment(data.dueDateTime).utc(true).format();
+        const dueDateTime = moment(data.dueDateTime).format();
         const projectDataNew = {
             ...projectEntity,
             ...data,
